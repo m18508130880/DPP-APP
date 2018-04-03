@@ -1,0 +1,15 @@
+<view class='page'>
+   <map id="map" class="bg_map" longitude="{{project.lng}}" latitude="{{project.lat}}" markers="{{markers}}" polyline="{{polyline}}" bindmarkertap="markertap" scale="18">
+  </map>
+    <!-- 底部功能模块按钮 -->
+  <view class='bottom_button'>
+    <button plain="true" bindtap="changeF" style="background-color:{{select?'#87CEEBDD':''}}">功能</button>
+  </view>
+  <!-- 选择功能模块 -->
+  <scroll-view class='button_f' style="display:{{select?'none':''}}" scrool-y="true">
+    <view class="scroll_f" bindtap="gjInfo">管井列表</view>
+    <view class="scroll_f" bindtap="gxInfo">管线列表</view>
+    <view class="scroll_f" bindtap="alert">告警列表</view>
+    <view class="scroll_f" bindtap="gjPos">管井定位</view>
+  </scroll-view>
+</view>

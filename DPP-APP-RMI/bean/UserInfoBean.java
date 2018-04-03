@@ -5,16 +5,20 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import json.UserInfoJsonBean;
 import rmi.Rmi;
 import rmi.RmiBean;
 import util.CommUtil;
 import util.CurrStatus;
 import util.MsgBean;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**UserInfoBean 登录筛选\人员信息
  * @author Cui
@@ -42,120 +46,39 @@ public class UserInfoBean extends RmiBean
 		super.className = "UserInfoBean";
 	}
 	
-	
 	/** 所有用户登录处
 	 * @param request
 	 * @param response
 	 * @param pRmi
 	 */
-	public void Login(HttpServletRequest request, HttpServletResponse response, Rmi pRmi)
+	public void Login(HttpServletRequest request, HttpServletResponse response, Rmi pRmi, String Url, HashMap<String , String> TokenList)
 	{
+		PrintWriter output = null;
 		try
 		{
 			getHtmlData(request);
-			currStatus = (CurrStatus)request.getSession().getAttribute("CurrStatus_" + Sid);
-			if(null == currStatus)
-				currStatus = new CurrStatus();
-			currStatus.getHtmlData(request, false);
 			
-			String Url = "index.jsp";
+			UserInfoJsonBean json = new UserInfoJsonBean();
+			json.setUrl(Url);
+			json.setId(Id);
+			json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_FAILED, 4));
+			
 			msgBean = pRmi.RmiExec(21, this, 0, 25);
+			//登入成功
 			if(msgBean.getStatus() == MsgBean.STA_SUCCESS)
 			{
-				if(StrMd5.substring(0,20).trim().equalsIgnoreCase("system"))
-				{
-					
-				}
-				else if(StrMd5.substring(0,20).trim().equalsIgnoreCase("admin"))
-				{
-					//登入信息
-					msgBean = pRmi.RmiExec(0, this, 0, 25);
-					request.getSession().setAttribute("UserInfo_" + Sid, (UserInfoBean)((ArrayList<?>)msgBean.getMsg()).get(0));
-
-					//公司信息
-					CorpInfoBean corpInfoBean = new CorpInfoBean();
-					msgBean = pRmi.RmiExec(0, corpInfoBean, 0, 25);
-					if(null != msgBean.getMsg() && ((ArrayList<?>)msgBean.getMsg()).size() > 0)
-					{
-						request.getSession().setAttribute("Corp_Info_" + Sid, (CorpInfoBean)((ArrayList<?>)msgBean.getMsg()).get(0));
-					}
-					
-					//项目信息
-					ProjectInfoBean projectInfoBean = new ProjectInfoBean();
-					msgBean = pRmi.RmiExec(0, projectInfoBean, 0, 25); 
-					request.getSession().setAttribute("Project_Info_" + Sid, (Object)msgBean.getMsg());
-					
-					
-					//设备信息
-					EquipInfoBean equipmentInfoBean = new EquipInfoBean();
-					msgBean = pRmi.RmiExec(0, equipmentInfoBean, 0, 25);
-					request.getSession().setAttribute("Equip_Info_" + Sid, (Object)msgBean.getMsg());
-					
-					//管井查询-无分页
-					DevGJBean devGJBean = new DevGJBean();
-					msgBean = pRmi.RmiExec(1, devGJBean, 0, 25); 
-					request.getSession().setAttribute("Map_GJ_" + Sid, (Object)msgBean.getMsg());
-					
-					/*//管线查询
-					DevGXBean GXList = new DevGXBean();
-					msgBean = pRmi.RmiExec(0, GXList, currStatus.getCurrPage()); 
-					request.getSession().setAttribute("GXList_" + Sid, (Object)msgBean.getMsg());
-					currStatus.setTotalRecord(msgBean.getCount());*/
-					
-					//管理权限
-					UserRoleBean roleBean = new UserRoleBean();
-			    	msgBean = pRmi.RmiExec(1, roleBean, 0, 25);
-			    	request.getSession().setAttribute("User_Manage_Role_" + Sid, ((Object)msgBean.getMsg()));
-					
-					Url = "admin/Main.jsp?Sid=" + Sid;
-				}
-				else //user用户
-				{
-					//登入信息 可得到所登录的用户信息
-					msgBean = pRmi.RmiExec(0, this, 0, 25);
-					request.getSession().setAttribute("UserInfo_" + Sid, (UserInfoBean)((ArrayList<?>)msgBean.getMsg()).get(0));
-					
-					//公司信息
-					CorpInfoBean corpInfoBean = new CorpInfoBean();
-					msgBean = pRmi.RmiExec(0, corpInfoBean, 0, 25);
-					if(null != msgBean.getMsg() && ((ArrayList<?>)msgBean.getMsg()).size() > 0)
-					{
-						request.getSession().setAttribute("Corp_Info_" + Sid, (CorpInfoBean)((ArrayList<?>)msgBean.getMsg()).get(0));
-					}
-					
-					//管井查询-无分页
-					DevGJBean devGJBean = new DevGJBean();
-					msgBean = pRmi.RmiExec(1, devGJBean, 0, 25); 
-					request.getSession().setAttribute("User_Map_GJ_" + Sid, (Object)msgBean.getMsg());
-					
-					//项目信息
-					ProjectInfoBean projectInfoBean = new ProjectInfoBean();
-					msgBean = pRmi.RmiExec(0, projectInfoBean, 0, 25); 
-					request.getSession().setAttribute("Project_Info_" + Sid, (Object)msgBean.getMsg());
-					
-					//历史数据
-					
-					/*//管线查询
-					DevGXBean GXList = new DevGXBean();
-					msgBean = pRmi.RmiExec(0, GXList, currStatus.getCurrPage());
-					request.getSession().setAttribute("GXList_" + Sid, (Object)msgBean.getMsg());
-					currStatus.setTotalRecord(msgBean.getCount());*/
-					
-			    	//管理权限
-					UserRoleBean roleBean = new UserRoleBean();
-			    	msgBean = pRmi.RmiExec(1, roleBean, 0, 25);
-			    	request.getSession().setAttribute("User_Manage_Role_" + Sid, ((Object)msgBean.getMsg()));
-
-			    	Url = "user/MapMain.jsp?Sid=" + Sid;
-				}
+				//身份令牌
+				String _Token = (CommUtil.BytesToHexString(new util.Md5().encrypt((CommUtil.SessionId()+"BESTAPP").getBytes()), 16)).toUpperCase();
+				json.setToken(_Token);
+				TokenList.put(_Token, Id);
+				
+				JSONObject jsonObj = (JSONObject) JSONObject.toJSON(json);
+		    	output = response.getWriter();
+		    	output.write(jsonObj.toString());
+		    	output.flush();
+		    	
+		    	System.out.println("AppLoginJson{" + jsonObj.toString() + "}");
 			}
-			else
-			{
-				currStatus.setResult(MsgBean.GetResult(msgBean.getStatus()));
-			}
-			
-			request.getSession().setAttribute("CurrStatus_" + Sid, currStatus);
-			response.sendRedirect(Url);
 		}
 		catch (Exception Exp)
 		{
@@ -280,44 +203,6 @@ public class UserInfoBean extends RmiBean
     	
 		request.getSession().setAttribute("CurrStatus_" + Sid, currStatus);
 	   	response.sendRedirect(currStatus.getJsp());
-	}
-	
-	
-	/** 检测账户是否存在 
-	 * @param request
-	 * @param response
-	 * @param pRmi
-	 * @param pFromZone
-	 */
-	public void IdCheck(HttpServletRequest request, HttpServletResponse response, Rmi pRmi, boolean pFromZone)
-	{
-		try 
-		{
-			getHtmlData(request);
-			currStatus = (CurrStatus)request.getSession().getAttribute("CurrStatus_" + Sid);
-			currStatus.getHtmlData(request, pFromZone);
-			
-			PrintWriter outprint = response.getWriter();
-			String Resp = "3006";
-			
-			msgBean = pRmi.RmiExec(2, this, 0, 25);//查找是否有该用户存在
-			switch(msgBean.getStatus())
-			{
-				case 0://已存在
-					Resp = "3006";
-					break;
-				default://可用
-					Resp = "0000";
-					break;
-			}
-			
-			request.getSession().setAttribute("CurrStatus_" + Sid, currStatus);
-			outprint.write(Resp);
-		}
-		catch (Exception Ex)
-		{
-			Ex.printStackTrace();
-		}
 	}
 	
 	/** 根据传入的int值获取相应的数据库查询语句

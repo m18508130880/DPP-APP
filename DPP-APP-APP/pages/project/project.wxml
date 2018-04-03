@@ -1,0 +1,12 @@
+<view class='page'>
+  <map id="map" class="bg_map" longitude="{{center.longitude}}" latitude="{{center.latitude}}" markers="{{center}}" scale="17">
+  </map>
+  <scroll-view class='bg_project' scroll-y='true'>
+      <block wx:for="{{dataAll}}" wx:for-index="i">
+          <view id="{{dataAll[i].id}}" class="scroll_project {{project.id==dataAll[i].id?ok:''}}" bindtap="changeMap" >{{dataAll[i].cName}}</view>
+      </block>
+  </scroll-view>
+  <view class='bg_button'>
+    <button id='{{project.id}}' class='{{ok}}' bindtap="gotoMap">进入管理</button>
+  </view>
+</view>

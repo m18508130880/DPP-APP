@@ -9,6 +9,8 @@ public class ProjectInfoJsonBean
 	private String CName;
 	private String Longitude;
 	private String Latitude;
+	private String WX_Lng;
+	private String WX_Lat;
 	private String MapLev;
 	private String MapAngle;
 	private String Demo;
@@ -19,6 +21,22 @@ public class ProjectInfoJsonBean
 	private String Token;
 	List<Object> CData = new ArrayList<Object>();
 	
+	public String getWX_Lng() {
+		return WX_Lng;
+	}
+
+	public void setWX_Lng(String wX_Lng) {
+		WX_Lng = wX_Lng;
+	}
+
+	public String getWX_Lat() {
+		return WX_Lat;
+	}
+
+	public void setWX_Lat(String wX_Lat) {
+		WX_Lat = wX_Lat;
+	}
+
 	public String getUrl()
 	{
 		return Url;

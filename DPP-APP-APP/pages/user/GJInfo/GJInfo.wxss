@@ -1,0 +1,109 @@
+/* pages/user/data/data.wxss */
+.data-top{
+    width: 15vh;
+    height: 5vh;
+    margin: 1vh 0vh 1vh 1vh;
+    padding-top: 1vh;
+	text-align: center;
+    background-color: #A7D7B9;
+    display: inline-block;
+}
+
+.bg{
+    background-color: #A7D7B9;
+    margin-left: 1vh;
+    margin-right: 1vh;
+    margin-bottom: 1vh;
+    padding-top: 1vh;
+    height: 5vh;
+}
+
+.profile-tab {
+	display: flex;
+    white-space: nowrap;
+}
+
+.profile-tab-sub {
+    width: 100px;
+    height: 40px;
+    margin: 10px 5px 5px 5px;
+    padding-top: 15px;
+	text-align: center;
+    background-color: #A7D7B9;
+    display: inline-block;
+}
+
+.include-select{
+    display: none
+}
+
+.select{
+    background-color: yellow;
+}
+
+.message{
+    color: white;
+}
+
+/*--横向滑动scroll-view隐藏滚动条--*/
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+/*-- 时间选择器 --*/
+.section{
+    margin: 1vh 1vh 1vh 1vh;
+    background-color:rgba(255,255,255,0.2);
+    flex-direction:row;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    width: 97%;
+    height: 8vh;
+}
+.picker{
+    border: 1px solid darkgray;
+    margin: 1vh 1vh 1vh 1vh;
+    padding: 1vh 1vh 1vh 1vh;
+    justify-content: center;
+    align-items: center;
+    display: inline-block;
+}
+.picker-s{
+    width: 20%;
+}
+
+/*-- table--*/
+.table {
+    margin: 1vh 1vh 1vh 1vh;
+    border: 1px solid darkgray;
+}
+.tr {
+    display: flex;
+    height: 3rem;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid darkgray;
+}
+.td {
+    color: white;
+    width:50%;
+    justify-content: center;
+    text-align: center;
+}
+.bg-g{
+    background-color:rgba(255,255,255,0.2);
+    color: white;
+}
+.th {
+    width: 50%;
+    justify-content: center;
+    background: #3366FF;
+    color: #fff;
+    display: flex;
+    height: 3rem;
+    align-items: center;
+}

@@ -5,15 +5,21 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import json.AlertInfoJsonBean;
 import rmi.Rmi;
 import rmi.RmiBean;
-import util.*;
+import util.CommUtil;
+import util.MsgBean;
+
+import com.alibaba.fastjson.JSONObject;
 
 public class AlertInfoBean extends RmiBean
 {
@@ -29,73 +35,74 @@ public class AlertInfoBean extends RmiBean
 		super.className = "AlertInfoBean";
 	}
 
-	/**
-	 * @param request
-	 * @param response
-	 * @param pRmi
-	 * @param pFromZone
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	public void ExecCmd(HttpServletRequest request, HttpServletResponse response, Rmi pRmi, boolean pFromZone) throws ServletException, IOException
+	public void ExecCmd(HttpServletRequest request, HttpServletResponse response, Rmi pRmi, boolean pFromZone, String Url, HashMap<String , String> TokenList) throws ServletException, IOException
 	{
-		getHtmlData(request);
-		currStatus = (CurrStatus) request.getSession().getAttribute("CurrStatus_" + Sid);
-		currStatus.getHtmlData(request, pFromZone);
-		
-		msgBean = pRmi.RmiExec(currStatus.getCmd(), this, currStatus.getCurrPage(), 25);
-		switch (currStatus.getCmd())
-		{
-			case 0:// 查询
-				currStatus.setTotalRecord(msgBean.getCount());
-				request.getSession().setAttribute("Alert_Info_" + Sid, (Object) msgBean.getMsg());
-				currStatus.setJsp("Alert_Info.jsp?Sid=" + Sid);
-				break;
-			case 10:
-				currStatus.setResult("处理成功!");
-				msgBean = pRmi.RmiExec(2, this, currStatus.getCurrPage(), 25);
-			case 2:// 条件查询
-				currStatus.setTotalRecord(msgBean.getCount());
-				request.getSession().setAttribute("Alert_Info_" + Sid, (Object) msgBean.getMsg());
-				currStatus.setJsp("Alert_Info.jsp?Sid=" + Sid);
-				break;
+		PrintWriter output = null;
+		try {
+			getHtmlData(request);
+
+			AlertInfoJsonBean json = new AlertInfoJsonBean();
+			json.setUrl(Url);
+			json.setRst(CommUtil.IntToStringLeftFillZero(
+					MsgBean.STA_FAILED, 4));
+			if (TokenList.containsKey(Token)) {
+				msgBean = pRmi.RmiExec(Cmd, this, 0, 25);
+				switch (Cmd) {
+				case 0:
+					// 获取管井信息
+					if (msgBean.getStatus() == MsgBean.STA_SUCCESS) {
+						List<Object> CData = new ArrayList<Object>();
+						ArrayList<?> alertInfoList = (ArrayList<?>) msgBean
+								.getMsg();
+						Iterator<?> alertInfoIterator = alertInfoList.iterator();
+						while (alertInfoIterator.hasNext()) {
+							AlertInfoBean RealJson = (AlertInfoBean) alertInfoIterator
+									.next();
+							AlertInfoJsonBean alertInfoJson = new AlertInfoJsonBean();
+							alertInfoJson.setCpm_Id(RealJson.getCpm_Id());
+							alertInfoJson.setEquip_Id(RealJson.getEquip_Id());
+							alertInfoJson.setCName(RealJson.getCName());
+							alertInfoJson.setAttr_Id(RealJson.getAttr_Id());
+							alertInfoJson.setAttr_Name(RealJson.getAttr_Name());
+							alertInfoJson.setLevel(RealJson.getLevel());
+							alertInfoJson.setCTime(RealJson.getCTime());
+							alertInfoJson.setCurr_Data(RealJson.getCurr_Data());
+							alertInfoJson.setGJ_Id(RealJson.getGJ_Id());
+							alertInfoJson.setProject_Id(RealJson.getProject_Id());
+							alertInfoJson.setStatus(RealJson.getStatus());
+							alertInfoJson.setUnit(RealJson.getUnit());
+							alertInfoJson.setDes(RealJson.getDes());
+							alertInfoJson.setLongitude(RealJson.getLongitude());
+							alertInfoJson.setLatitude(RealJson.getLatitude());
+							
+							CData.add(alertInfoJson);
+						}
+						json.setCData(CData);
+						json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_SUCCESS, 4));
+					}
+					break;
+				}
+			} else {
+				// 鉴权失败
+				json.setRst(CommUtil.IntToStringLeftFillZero(
+						MsgBean.STA_ACCOUNT_NOT_LOGIN, 4));
+			}
+
+			JSONObject jsonObj = (JSONObject) JSONObject.toJSON(json);
+			response.setCharacterEncoding("UTF-8");
+			output = response.getWriter();
+			output.write(jsonObj.toString());
+			output.flush();
+			
+			//System.out.println("AppGisJson:" + jsonObj.toString() + ";");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			output.close();
 		}
-		// 查询告警类型
-		msgBean = pRmi.RmiExec(3, this, 0, 0);
-		request.getSession().setAttribute("Alert_Type_" + Sid, (Object) msgBean.getMsg());
 		
-		request.getSession().setAttribute("CurrStatus_" + Sid, currStatus);
-		response.sendRedirect(currStatus.getJsp());
 	}
 
-	public void AlertNow(HttpServletRequest request, HttpServletResponse response, Rmi pRmi, boolean pFromZone) throws ServletException, IOException
-	{
-		getHtmlData(request);
-		currStatus = (CurrStatus) request.getSession().getAttribute("CurrStatus_" + Sid);
-		currStatus.getHtmlData(request, pFromZone);
-		
-		PrintWriter outprint = response.getWriter();
-		String Resp = "9999";
-		// Cmd = 1
-		msgBean = pRmi.RmiExec(currStatus.getCmd(), this, 0, 0);
-		if (msgBean.getStatus() == MsgBean.STA_SUCCESS)
-		{
-			ArrayList<?> alertNow = (ArrayList<?>) msgBean.getMsg();
-			if (null != alertNow)
-			{
-				Resp = "0000";
-				Iterator<?> iterator = alertNow.iterator();
-				while (iterator.hasNext())
-				{
-					AlertInfoBean bean = (AlertInfoBean) iterator.next();
-					Resp += bean.getGJ_Id()+","+bean.getCTime()+"," + bean.getAttr_Id() + "," + bean.getAttr_Name()+","+bean.getDes()+","+bean.getLongitude()+","+bean.getLatitude()+";";
-				}
-			}
-		}
-		System.out.println(Resp);
-		request.getSession().setAttribute("CurrStatus_" + Sid, currStatus);
-		outprint.write(Resp);
-	}
 	/**
 	 * 获取相应sql语句
 	 * 
@@ -105,34 +112,17 @@ public class AlertInfoBean extends RmiBean
 		String Sql = "";
 		switch (pCmd)
 		{
-			case 0:// 查询全部
+			case 0:// 查询最新
+			Sql = " select t.cpm_id, t.equip_id, t.cname, t.attr_id, t.attr_name, t.level, t.ctime, t.cdata, t.gj_id, t.project_id, t.status, t.unit, t.des, t.longitude, t.latitude " + 
+				  " from view_alert_now t where t.project_id = '" + Project_Id + "' and t.status = '0' order by t.ctime ";
+			break;
+			case 1:// 查询全部
 				Sql = " select t.cpm_id, t.equip_id, t.cname, t.attr_id, t.attr_name, t.level, t.ctime, t.cdata, t.gj_id, t.project_id, t.status, t.unit, t.des, t.longitude, t.latitude " + 
-					  " from view_alert_info t where t.project_id = '" + currStatus.getFunc_Project_Id() + "'"+
+					  " from view_alert_info t where t.project_id = '" + Project_Id + "'"+
 				  	  " order by t.ctime desc ";
 				break;
-			case 1:// 查询最新
-				Sql = " select t.cpm_id, t.equip_id, t.cname, t.attr_id, t.attr_name, t.level, t.ctime, t.cdata, t.gj_id, t.project_id, t.status, t.unit, t.des, t.longitude, t.latitude " + 
-					  " from view_alert_now t where t.project_id = '" + currStatus.getFunc_Project_Id() + "' and t.status = '0' order by t.ctime ";
-				break;
-			case 2:// 条件查询
-				Sql = " select t.cpm_id, t.equip_id, t.cname, t.attr_id, t.attr_name, t.level, t.ctime, t.cdata, t.gj_id, t.project_id, t.status, t.unit, t.des, t.longitude, t.latitude " + 
-					  " from view_alert_info t where t.project_id = '" + currStatus.getFunc_Project_Id() + "'"+
-					  //" and t.ctime >= date_format('" + currStatus.getVecDate().get(0).toString() + "', '%Y-%m-%d %H-%i-%S')" +
-					  //" and t.ctime <= date_format('" + currStatus.getVecDate().get(1).toString() + "', '%Y-%m-%d %H-%i-%S')" + 
-					  " and t.attr_id like '%" + currStatus.getFunc_Sub_Type_Id() + "%' " +
-					  " and t.gj_id like '%" + GJ_Id + "%' " +
-					  " order by t.ctime desc ";
-				break;
-			case 3:// 查询告警类型
-				Sql = " select t.cpm_id, t.equip_id, t.cname, t.attr_id, t.attr_name, t.level, t.ctime, t.cdata, t.gj_id, t.project_id, t.status, t.unit, t.des, t.longitude, t.latitude " + 
-					  " from view_alert_info t group by t.attr_id";
-				break;
-			case 10:// 修改状态
-				Sql = " update alert_info set status = '1' where cpm_id = '" + Cpm_Id + "'" +
-					  " and id = '" + Equip_Id + "'" +
-					  " and attr_id = '" + currStatus.getFunc_Sub_Type_Id() + "'" +
-					  " and gj_id = '" + GJ_Id + "'";
-				break;
+			
+			
 		}
 		return Sql;
 	}
@@ -153,7 +143,7 @@ public class AlertInfoBean extends RmiBean
 			setAttr_Name(pRs.getString(5));
 			setLevel(pRs.getString(6));
 			setCTime(pRs.getString(7));
-			setCData(pRs.getString(8));
+			setCurr_Data(pRs.getString(8));
 			setGJ_Id(pRs.getString(9));
 			setProject_Id(pRs.getString(10));
 			setStatus(pRs.getString(11));
@@ -180,7 +170,7 @@ public class AlertInfoBean extends RmiBean
 		boolean IsOK = true;
 		try
 		{
-			setSid(CommUtil.StrToGB2312(request.getParameter("Sid")));
+			setCmd(CommUtil.StrToInt(request.getParameter("Cmd")));
 			setCpm_Id(CommUtil.StrToGB2312(request.getParameter("Cpm_Id")));
 			setEquip_Id(CommUtil.StrToGB2312(request.getParameter("Equip_Id")));
 			setCName(CommUtil.StrToGB2312(request.getParameter("CName")));
@@ -188,7 +178,7 @@ public class AlertInfoBean extends RmiBean
 			setAttr_Name(CommUtil.StrToGB2312(request.getParameter("Attr_Name")));
 			setLevel(CommUtil.StrToGB2312(request.getParameter("Level")));
 			setCTime(CommUtil.StrToGB2312(request.getParameter("CTime")));
-			setCData(CommUtil.StrToGB2312(request.getParameter("CData")));
+			setCurr_Data(CommUtil.StrToGB2312(request.getParameter("Curr_Data")));
 			setGJ_Id(CommUtil.StrToGB2312(request.getParameter("GJ_Id")));
 			setProject_Id(CommUtil.StrToGB2312(request.getParameter("Project_Id")));
 			setStatus(CommUtil.StrToGB2312(request.getParameter("Status")));
@@ -211,7 +201,7 @@ public class AlertInfoBean extends RmiBean
 	private String Attr_Name;
 	private String Level;
 	private String CTime;
-	private String CData;
+	private String Curr_Data;
 	private String GJ_Id;
 	private String Project_Id;
 	private String Status;
@@ -221,7 +211,24 @@ public class AlertInfoBean extends RmiBean
 	private String Longitude;
 	private String Latitude;
 
-	private String Sid;
+	private int Cmd;
+	private String Token;
+
+	public int getCmd() {
+		return Cmd;
+	}
+
+	public void setCmd(int cmd) {
+		Cmd = cmd;
+	}
+
+	public String getToken() {
+		return Token;
+	}
+
+	public void setToken(String token) {
+		Token = token;
+	}
 
 	public String getLongitude()
 	{
@@ -323,14 +330,12 @@ public class AlertInfoBean extends RmiBean
 		CTime = cTime;
 	}
 
-	public String getCData()
-	{
-		return CData;
+	public String getCurr_Data() {
+		return Curr_Data;
 	}
 
-	public void setCData(String cData)
-	{
-		CData = cData;
+	public void setCurr_Data(String curr_Data) {
+		Curr_Data = curr_Data;
 	}
 
 	public String getGJ_Id()
@@ -371,16 +376,6 @@ public class AlertInfoBean extends RmiBean
 	public void setDes(String des)
 	{
 		Des = des;
-	}
-
-	public String getSid()
-	{
-		return Sid;
-	}
-
-	public void setSid(String sid)
-	{
-		Sid = sid;
 	}
 
 	public static long getSerialversionuid()

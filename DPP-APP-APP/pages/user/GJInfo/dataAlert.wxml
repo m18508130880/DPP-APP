@@ -1,0 +1,31 @@
+<!-- 告警数据 -->
+
+<scroll-view class="section" scroll-x="true">
+    <view class="picker">
+        <picker id="BDate" mode="date" value="{{BDate}}" start="2010-01-01" end="2050-01-01" bindchange="BDateChange">{{BDate}}</picker>
+    </view>
+    <view class="picker">
+        <picker id="EDate" mode="date" value="{{EDate}}" start="2010-01-01" end="2050-01-01" bindchange="EDateChange">{{EDate}}</picker>
+    </view>
+    <view class="picker" bindtap="gotoDataAlert">查询</view>
+</scroll-view>
+
+<view class="table">
+    <view class="tr">
+        <view class="th">描述</view>
+        <view class="th">状态</view>
+        <view class="th">时间</view>
+    </view>
+    <block wx:for="{{dataAlert}}" wx:for-index="i" wx:key="">
+        <view id="{{dataAlert[i].id}}" class="tr bg-g" wx:if="{{i % 2 == 0}}">
+            <view class="td">{{dataAlert[i].cData}}</view>
+            <view class="td">{{dataAlert[i].status}}</view>
+            <view class="td">{{dataAlert[i].cTime}}</view>
+        </view>
+        <view class="tr" wx:else>
+            <view class="td">{{dataAlert[i].cData}}</view>
+            <view class="td">{{dataAlert[i].status}}</view>
+            <view class="td">{{dataAlert[i].cTime}}</view>
+        </view>
+    </block>
+</view>

@@ -1,0 +1,20 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/project/project",
+    "pages/user/GIS/GIS",
+    "pages/user/GJInfo/GJInfo",
+    "pages/user/GXInfo/GXInfo",
+    "pages/user/Alert/Alert",
+    "pages/user/GJPos/GJPos"
+  ],
+  "window":{
+    "backgroundTextStyle":"dark",
+    "navigationBarBackgroundColor": "#268dcd",
+    "navigationBarTitleText": "城基管道科技",
+    "navigationBarTextStyle":"white",
+    "enablePullDownRefresh": false
+  },
+ 
+  "debug": true
+}

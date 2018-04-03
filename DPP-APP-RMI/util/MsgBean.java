@@ -30,6 +30,7 @@ public class MsgBean implements Serializable
 	public static final int STA_ACCOUNT_PWD_ERROR			= 1002;	//密码错误
 	public static final int STA_CHECK_CODE_ERROR			= 1003;	//验证码错误
 	public static final int STA_ACCOUNT_OTP_ERROR			= 1004;	//动态密码错误
+	public static final int STA_ACCOUNT_NOT_LOGIN			= 1005;	//鉴权失败
 
 	
 	/**根据传入的 int pStatus 获取相应的中文状态名称    

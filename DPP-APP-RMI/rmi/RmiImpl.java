@@ -2,19 +2,22 @@ package rmi;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.CallableStatement;//用于执行sql存储过程的接口
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.CallableStatement;//用于执行sql存储过程的接口
+import java.util.ArrayList;
 
-import util.*;
-
-import java.util.*;
-
-import net.TPCClient;
-import bean.*;
 import oracle.jdbc.OracleTypes;
+import util.CommUtil;
+import util.DBUtil;
+import util.MsgBean;
+import bean.ProjectInfoBean;
+import bean.TopoGJBean;
+import bean.TopoGXBean;
+import bean.UserInfoBean;
+import bean.UserRoleBean;
 
 /** RmiImpl implements Rmi 
  * @author Cui
@@ -32,7 +35,7 @@ public class RmiImpl extends UnicastRemoteObject implements Rmi
 	public final static long serialVersionUID = 1001;
 	
 	private DBUtil m_DBUtil = null;	
-	private TPCClient m_TPCClient = null;	
+	//private TPCClient m_TPCClient = null;	
 	
 	/**空参构造器
 	 * @throws RemoteException
@@ -44,9 +47,9 @@ public class RmiImpl extends UnicastRemoteObject implements Rmi
 	/**初始化数据库连接池
 	 * @param pDbUtil
 	 */
-	public void Init(DBUtil pDbUtil , TPCClient tPCClient ) {
+	public void Init(DBUtil pDbUtil) {
 		m_DBUtil    = pDbUtil;
-		m_TPCClient = tPCClient;
+		//m_TPCClient = tPCClient;
 	}
 	
 
@@ -174,12 +177,6 @@ public class RmiImpl extends UnicastRemoteObject implements Rmi
 			{
 				switch((int)pClass)
 				{
-				/******************system****************/
-				/******************admin*****************/
-					
-				    case RmiBean.RMI_CORP_INFO:
-				    	rmiBean = new CorpInfoBean();
-				    	break;
 					case RmiBean.RMI_USER_INFO:
 						rmiBean = new UserInfoBean();
 						break;
@@ -189,42 +186,21 @@ public class RmiImpl extends UnicastRemoteObject implements Rmi
 					case RmiBean.RMI_PROJECT_INFO:
 						rmiBean = new ProjectInfoBean();
 						break;
-					case RmiBean.RMI_EQUIP_INFO:
-						rmiBean = new EquipInfoBean();
+					case RmiBean.RMI_TOPOGJ:
+						rmiBean = new TopoGJBean();
 						break;
-					case RmiBean.RMI_DATA_NOW:
-						rmiBean = new DataNowBean();
-						break;
-
-				/******************user*****************/
-					case RmiBean.RMI_DATA:
-						rmiBean = new DataBean();
-						break;
-					case RmiBean.RMI_DATAGJ:
-						rmiBean = new DataGJBean();
-						break;	
-					case RmiBean.RMI_DATAGX:
-						rmiBean = new DataGXBean();
+					case RmiBean.RMI_TOPOGX:
+						rmiBean = new TopoGXBean();
 						break;
 					case RmiBean.RMI_DEVGJ:
-						rmiBean = new DevGJBean();
+						rmiBean = new TopoGXBean();
 						break;
 					case RmiBean.RMI_DEVGX:
-						rmiBean = new DevGXBean();
-						break;
-					case RmiBean.RMI_MAP_IMAGE:
-						rmiBean = new MapImageBean();
+						rmiBean = new TopoGXBean();
 						break;
 					case RmiBean.RMI_ALERT:
-						rmiBean = new AlertInfoBean();
+						rmiBean = new TopoGXBean();
 						break;
-					case RmiBean.RMI_DEVBZ:
-						rmiBean = new DevBZBean();
-						break;
-					case RmiBean.RMI_DEVMAP:
-						rmiBean = new DevMapBean();
-						break;
-						
 				}
 				rmiBean.getData(rs);
 				alist.add(rmiBean);
@@ -512,50 +488,50 @@ public class RmiImpl extends UnicastRemoteObject implements Rmi
 	{
 		System.out.println("pCmd["+pCmd+"]\npClient_Id["+pClient_Id+"]");
 		String ret = "9999";
-		switch(pCmd)
-		{
-			case Cmd_Sta.CMD_RESTART:
-			{	
-				String SendData = CommUtil.StrBRightFillSpace(" ", 20)				//保留字
-								+ "0000"											//执行状态
-								+ "000" + Cmd_Sta.CMD_RESTART						//处理指令
-								+ CommUtil.StrBRightFillSpace(pClient_Id, 10)		//DTU编号
-								+ CommUtil.StrBRightFillSpace(pOprator, 10);		//操作人员
-				System.out.println("SendData["+SendData+"]");
-				if(m_TPCClient.SetSendMsg(SendData, 1))
-				{
-					ret = "0000";
-				}
-				break;
-			}
-			case Cmd_Sta.CMD_UPDATE_TIME:
-			{
-				String SendData = CommUtil.StrBRightFillSpace(" ", 20)
-								+ "0000"
-								+ "000" + Cmd_Sta.CMD_UPDATE_TIME
-								+ CommUtil.StrBRightFillSpace(pClient_Id, 10)
-								+ CommUtil.StrBRightFillSpace(pOprator, 10);
-				System.out.println("SendData["+SendData+"]");
-				if(m_TPCClient.SetSendMsg(SendData, 1))
-				{
-					ret = "0000";
-				}
-				break;
-			}
-			case Cmd_Sta.CMD_UPDATE_DATA:
-			{
-				String SendData = CommUtil.StrBRightFillSpace(" ", 20)
-						+ "0000"
-						+ Cmd_Sta.CMD_UPDATE_DATA
-						+ CommUtil.StrBRightFillSpace(pClient_Id, 10);
-				System.out.println("SendData["+SendData+"]");
-				if(m_TPCClient.SetSendMsg(SendData, 1))
-				{
-					ret = "0000";
-				}
-				break;
-			}
-		}	
+//		switch(pCmd)
+//		{
+//			case Cmd_Sta.CMD_RESTART:
+//			{	
+//				String SendData = CommUtil.StrBRightFillSpace(" ", 20)				//保留字
+//								+ "0000"											//执行状态
+//								+ "000" + Cmd_Sta.CMD_RESTART						//处理指令
+//								+ CommUtil.StrBRightFillSpace(pClient_Id, 10)		//DTU编号
+//								+ CommUtil.StrBRightFillSpace(pOprator, 10);		//操作人员
+//				System.out.println("SendData["+SendData+"]");
+//				if(m_TPCClient.SetSendMsg(SendData, 1))
+//				{
+//					ret = "0000";
+//				}
+//				break;
+//			}
+//			case Cmd_Sta.CMD_UPDATE_TIME:
+//			{
+//				String SendData = CommUtil.StrBRightFillSpace(" ", 20)
+//								+ "0000"
+//								+ "000" + Cmd_Sta.CMD_UPDATE_TIME
+//								+ CommUtil.StrBRightFillSpace(pClient_Id, 10)
+//								+ CommUtil.StrBRightFillSpace(pOprator, 10);
+//				System.out.println("SendData["+SendData+"]");
+//				if(m_TPCClient.SetSendMsg(SendData, 1))
+//				{
+//					ret = "0000";
+//				}
+//				break;
+//			}
+//			case Cmd_Sta.CMD_UPDATE_DATA:
+//			{
+//				String SendData = CommUtil.StrBRightFillSpace(" ", 20)
+//						+ "0000"
+//						+ Cmd_Sta.CMD_UPDATE_DATA
+//						+ CommUtil.StrBRightFillSpace(pClient_Id, 10);
+//				System.out.println("SendData["+SendData+"]");
+//				if(m_TPCClient.SetSendMsg(SendData, 1))
+//				{
+//					ret = "0000";
+//				}
+//				break;
+//			}
+//		}	
 		return ret;
 	}
 }

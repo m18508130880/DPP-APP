@@ -1,14 +1,22 @@
 package bean;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import json.ProjectInfoJsonBean;
 import rmi.Rmi;
 import rmi.RmiBean;
-import util.*;
+import util.CommUtil;
+import util.MsgBean;
+
+import com.alibaba.fastjson.JSONObject;
 
 public class ProjectInfoBean extends RmiBean 
 {
@@ -17,56 +25,68 @@ public class ProjectInfoBean extends RmiBean
 	{
 		return serialVersionUID;
 	}
-	
+
 	public ProjectInfoBean()
 	{
 		super.className = "ProjectInfoBean";
 	}
-	
-	public void ExecCmd(HttpServletRequest request, HttpServletResponse response, Rmi pRmi, boolean pFromZone) throws ServletException, IOException
+
+	public void ExecCmd(HttpServletRequest request, HttpServletResponse response, Rmi pRmi, boolean pFromZone, String Url, HashMap<String , String> TokenList) throws ServletException, IOException
 	{
-		getHtmlData(request);
-		currStatus = (CurrStatus)request.getSession().getAttribute("CurrStatus_" + Sid);
-		currStatus.getHtmlData(request, pFromZone);
-		
-		msgBean = pRmi.RmiExec(currStatus.getCmd(), this, 0, 25);
-		switch(currStatus.getCmd())
+
+		PrintWriter output = null;
+		try
 		{
-			case 10://添加
-			case 11://编辑
-				currStatus.setResult(MsgBean.GetResult(msgBean.getStatus()));
-				msgBean = pRmi.RmiExec(0, this, 0, 25);
-			case 0://查询
-		    	request.getSession().setAttribute("Project_Info_" + Sid, ((Object)msgBean.getMsg()));
-		    	currStatus.setJsp("Project_Info.jsp?Sid=" + Sid);		    
-		    	break;
+			getHtmlData(request);
+			ProjectInfoJsonBean Json = new ProjectInfoJsonBean();
+			Json.setUrl(Url);
+			Json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_FAILED, 4));
+			if(TokenList.containsKey(Token))
+			{
+
+			}
+			else
+			{
+				//鉴权失败
+				Json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_ACCOUNT_NOT_LOGIN, 4));
+			}
+
+			JSONObject jsonObj = (JSONObject) JSONObject.toJSON(Json);
+			response.setCharacterEncoding("UTF-8");
+			output = response.getWriter();
+			output.write(jsonObj.toString());
+			output.flush();
+
+			System.out.println("AppGisJson:" + jsonObj.toString());
 		}
-		
-		request.getSession().setAttribute("CurrStatus_" + Sid, currStatus);
-	   	response.sendRedirect(currStatus.getJsp());
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			output.close();
+		}
+
 	}
-	
+
 	public String getSql(int pCmd)
 	{
 		String Sql = "";
 		switch (pCmd)
 		{
-			case 0://查询
-				Sql = " select  t.id, t.cname, t.Longitude, t.Latitude, t.MapLev , t.MapAngle , t.Demo "
-						+ " from project_info t order by t.id";
-				break;
-			case 10://添加
-				Sql = " insert into project_info( id, cname, Longitude, Latitude, MapLev, MapAngle, Demo)" +
-					  " values('"+ Id +"', '"+ CName +"', '"+ Longitude +"', '"+ Latitude +"', '"+ MapLev +"', '"+ MapAngle +"', '"+ Demo +"')";
-				break;
-			case 11://编辑
-				Sql = " update project_info t set t.cname= '"+ CName +"', t.Longitude= '"+ Longitude +"', t.Latitude= '"+ Latitude +"', t.MapLev= '"+ MapLev +"' , t.MapAngle= '"+ MapAngle +"' , t.Demo= '"+ Demo +"' " +
-					  " where t.id = '"+ Id +"'";
-				break;
+		case 0://查询全部
+			Sql = " select  t.id, t.cname, t.Longitude, t.Latitude, t.MapLev , t.MapAngle , t.Demo "
+					+ " from project_info t order by t.id";
+			break;
+		case 1://查询单个
+			Sql = " select  t.id, t.cname, t.Longitude, t.Latitude, t.MapLev , t.MapAngle , t.Demo "
+					+ " from project_info t where t.id = '" + Id + "' order by t.id";
+			break;
 		}
 		return Sql;
 	}
-	
+
 	public boolean getData(ResultSet pRs)
 	{
 		boolean IsOK = true;
@@ -86,7 +106,7 @@ public class ProjectInfoBean extends RmiBean
 		}
 		return IsOK;
 	}
-	
+
 	public boolean getHtmlData(HttpServletRequest request)
 	{
 		boolean IsOK = true;
@@ -107,7 +127,7 @@ public class ProjectInfoBean extends RmiBean
 		}
 		return IsOK;
 	}
-	
+
 	private String Id;
 	private String CName;
 	private String Longitude;
@@ -116,10 +136,16 @@ public class ProjectInfoBean extends RmiBean
 	private String MapAngle;
 	private String Demo;
 	private String Sid;
-	
-	
+
+	private String Token;
+
 	public String getMapAngle() {
 		return MapAngle;
+	}
+
+	public static long getSerialversionuid()
+	{
+		return serialVersionUID;
 	}
 
 	public void setMapAngle(String mapAngle) {
@@ -181,6 +207,6 @@ public class ProjectInfoBean extends RmiBean
 	public void setSid(String sid) {
 		Sid = sid;
 	}
-	
-	
+
+
 }
