@@ -53,9 +53,9 @@ public class DevGXBean extends RmiBean
 						List<Object> CData = new ArrayList<Object>();
 						ArrayList<?> devGXList = (ArrayList<?>) msgBean
 								.getMsg();
-						Iterator<?> devGJIterator = devGXList.iterator();
-						while (devGJIterator.hasNext()) {
-							DevGXBean RealJson = (DevGXBean) devGJIterator
+						Iterator<?> devGXIterator = devGXList.iterator();
+						while (devGXIterator.hasNext()) {
+							DevGXBean RealJson = (DevGXBean) devGXIterator
 									.next();
 							DevGXJsonBean devGXJson = new DevGXJsonBean();
 							devGXJson.setId(RealJson.getId());

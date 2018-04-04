@@ -2,20 +2,48 @@
 .data-top{
     width: 15vh;
     height: 5vh;
-    margin: 1vh 0vh 1vh 1vh;
+    margin: 1vh 0vh 0vh 1vh;
     padding-top: 1vh;
-	text-align: center;
+	  text-align: center;
     background-color: #A7D7B9;
     display: inline-block;
 }
-
-.bg{
+.data-value{
+    width: 15vh;
+    top : 0%;
+    left: 16vh;
+    height: 5vh;
+    margin: 1vh 0vh 1vh 0vh;
+    padding-top: 1vh;
+	  text-align: center;
+    background-color: #87CEEB;
+    display: inline-block;position: absolute;
+}
+.data-gjSum{
+    width: 21vh;
+    top : 0%;
+    right: 0%;
+    height: 5vh;
+    margin: 1vh 1vh 1vh 0vh;
+    padding-top: 1vh;
+	  text-align: center;
     background-color: #A7D7B9;
+    display: inline-block;position: absolute;
+}
+.scroll-tab {
+    width: 100%;
+    height: 8vh;
+}
+.bg{
+    background-color: #FFFFFF;
     margin-left: 1vh;
     margin-right: 1vh;
     margin-bottom: 1vh;
     padding-top: 1vh;
     height: 5vh;
+}
+.bg-g{
+    background-color:	#F5F5F5;
 }
 
 .profile-tab {
@@ -59,7 +87,7 @@
     flex-direction:row;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: black;
     width: 97%;
     height: 8vh;
 }
@@ -77,8 +105,16 @@
 
 /*-- table--*/
 .table {
-    margin: 1vh 1vh 1vh 1vh;
-    border: 1px solid darkgray;
+  position: absolute;
+  width: 96%;
+  height: 82%;
+  top:7%;
+  margin: 1vh 1vh 1vh 1vh;
+  border: 1px solid darkgray;
+}
+.table-tr {
+  width: 100%;
+  height: 100%;
 }
 .tr {
     display: flex;
@@ -89,14 +125,10 @@
     border: 1px solid darkgray;
 }
 .td {
-    color: white;
+    color: black;
     width:50%;
     justify-content: center;
     text-align: center;
-}
-.bg-g{
-    background-color:rgba(255,255,255,0.2);
-    color: white;
 }
 .th {
     width: 50%;
@@ -106,4 +138,30 @@
     display: flex;
     height: 3rem;
     align-items: center;
+}
+
+
+.bottom_button {
+  position: absolute;
+  width: 99%;
+  bottom: 0%;
+  height: 10%;
+  text-align: center;
+}
+.button_f {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 80%;
+  background-color: white;
+}
+.scroll_f {
+    width: 46%;
+    height: 10%;
+    margin: 1vh 1vh 0vh 1vh;
+    padding-top: 4vh;
+	  text-align: center;
+    background-color: #A7D7B9;
+    display: inline-block;
 }

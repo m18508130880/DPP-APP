@@ -112,17 +112,20 @@ public class AlertInfoBean extends RmiBean
 		String Sql = "";
 		switch (pCmd)
 		{
-			case 0:// 查询最新
+		case 0:// 查询最新
 			Sql = " select t.cpm_id, t.equip_id, t.cname, t.attr_id, t.attr_name, t.level, t.ctime, t.cdata, t.gj_id, t.project_id, t.status, t.unit, t.des, t.longitude, t.latitude " + 
-				  " from view_alert_now t where t.project_id = '" + Project_Id + "' and t.status = '0' order by t.ctime ";
+					" from view_alert_now t " + 
+					" where t.project_id = '" + Project_Id + "' and t.status = '0' " + 
+					" order by t.ctime ";
 			break;
-			case 1:// 查询全部
-				Sql = " select t.cpm_id, t.equip_id, t.cname, t.attr_id, t.attr_name, t.level, t.ctime, t.cdata, t.gj_id, t.project_id, t.status, t.unit, t.des, t.longitude, t.latitude " + 
-					  " from view_alert_info t where t.project_id = '" + Project_Id + "'"+
-				  	  " order by t.ctime desc ";
-				break;
-			
-			
+		case 1:// 查询全部
+			Sql = " select t.cpm_id, t.equip_id, t.cname, t.attr_id, t.attr_name, t.level, t.ctime, t.cdata, t.gj_id, t.project_id, t.status, t.unit, t.des, t.longitude, t.latitude " + 
+					" from view_alert_info t " + 
+					" where t.project_id = '" + Project_Id + "'"+
+					" order by t.ctime desc ";
+			break;
+
+
 		}
 		return Sql;
 	}

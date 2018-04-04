@@ -17,7 +17,7 @@ Page({
       url: 'http://118.31.78.234/dpp-app/Manage_Role.do',
       data: {
         Cmd: "0",
-        Id: str.id,
+        Id: str.uId,
         Token: token
       },
       method: 'GET',
@@ -27,6 +27,7 @@ Page({
           console.log(dataObj)
           for (var i = 0; i < dataObj.length; i++) {
             var project = {
+              uId: str.uId,
               id: dataObj[i].id,
               cName: dataObj[i].cName,
               lat: dataObj[i].wX_Lat,
@@ -87,7 +88,7 @@ Page({
     var project = that.data.project;
     if ((that.data.ok).length > 0){
       wx.navigateTo({
-        url: '../user/GIS/GIS?token=' + token + '&project_id=' + project.id + '&lat=' + project.lat + '&lng=' + project.lng
+        url: '../user/GIS/GIS?token=' + token + '&uId=' + project.uId + '&project_id=' + project.id + '&lat=' + project.lat + '&lng=' + project.lng
       })
     }
   }

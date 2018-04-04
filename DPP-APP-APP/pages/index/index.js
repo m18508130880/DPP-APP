@@ -43,8 +43,8 @@ Page({
           status = "成功";
           icon = "success";
           wx.navigateTo({
-            //url: '../user/map/map'
-            url: '../project/project?token=' + res.data.token + '&id=' + res.data.manage_Role
+            //url: '../user/picker/picker'
+            url: '../project/project?token=' + res.data.token + '&uId=' + res.data.manage_Role
           })
         }
       }, 

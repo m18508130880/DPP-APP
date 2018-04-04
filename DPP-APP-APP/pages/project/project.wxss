@@ -35,5 +35,5 @@
 }
 
 .color_cornflowerblue{
-  background-color: blue;
+  background-color: #87CEEB;
 }

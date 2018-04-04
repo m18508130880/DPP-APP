@@ -13,6 +13,9 @@ import oracle.jdbc.OracleTypes;
 import util.CommUtil;
 import util.DBUtil;
 import util.MsgBean;
+import bean.AlertInfoBean;
+import bean.DevGJBean;
+import bean.DevGXBean;
 import bean.ProjectInfoBean;
 import bean.TopoGJBean;
 import bean.TopoGXBean;
@@ -193,13 +196,13 @@ public class RmiImpl extends UnicastRemoteObject implements Rmi
 						rmiBean = new TopoGXBean();
 						break;
 					case RmiBean.RMI_DEVGJ:
-						rmiBean = new TopoGXBean();
+						rmiBean = new DevGJBean();
 						break;
 					case RmiBean.RMI_DEVGX:
-						rmiBean = new TopoGXBean();
+						rmiBean = new DevGXBean();
 						break;
 					case RmiBean.RMI_ALERT:
-						rmiBean = new TopoGXBean();
+						rmiBean = new AlertInfoBean();
 						break;
 				}
 				rmiBean.getData(rs);

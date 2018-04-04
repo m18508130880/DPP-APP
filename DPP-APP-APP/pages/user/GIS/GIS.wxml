@@ -11,5 +11,6 @@
     <view class="scroll_f" bindtap="gxInfo">管线列表</view>
     <view class="scroll_f" bindtap="alert">告警列表</view>
     <view class="scroll_f" bindtap="gjPos">管井定位</view>
+    <view class="scroll_f" bindtap="changeP">选择项目</view>
   </scroll-view>
 </view>

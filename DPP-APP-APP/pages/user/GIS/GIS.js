@@ -17,6 +17,7 @@ Page({
     var project_Id = str.project_id;
     that.setData({
       project: {
+        uId: str.uId,
         project_id: project_Id,
         lng: str.lng,
         lat: str.lat
@@ -70,6 +71,7 @@ Page({
                 var gxList = res.data.cData;
                 var polylineArray = new Array();
                 var color = "";var a = "";
+                var count = 0;
                 for (var i = 0; i < gxList.length; i++) {
                   var gjStartId = gxList[i].start_Id;
                   var gjEndId = gxList[i].end_Id;
@@ -81,8 +83,8 @@ Page({
                   } else {
                     color = "#0000FFDD";
                   }
-                  //if (gxList[i].id.indexOf("WG99") > -1 || gxList[i].id.indexOf("YG99") > -1) { continue; }
-                  polylineArray[i] = {
+                  if (gxList[i].id.indexOf("WG99") > -1 || gxList[i].id.indexOf("YG99") > -1) { continue; }
+                  polylineArray[count] = {
                     points: [{
                       latitude: Number(gjStart.tLng),
                       longitude: Number(gjStart.tLat)
@@ -94,6 +96,7 @@ Page({
                     width: 2,
                     id: gxList[i].id
                   }
+                  count ++;
                 }
                 console.log(a)
                 console.log(polylineArray)
@@ -154,28 +157,35 @@ Page({
     var that = this;
     var project = that.data.project;
     wx.navigateTo({
-      url: '../GJInfo/GJInfo?token=' + token + '&project_id=' + project.project_id
+      url: '../GJInfo/GJInfo?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
     })
   },
   gxInfo: function () {
     var that = this;
     var project = that.data.project;
     wx.navigateTo({
-      url: '../GIS/GIS?token=' + token + '&project_id=' + project.project_id
+      url: '../GXInfo/GXInfo?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
     })
   },
   alert: function () {
     var that = this;
     var project = that.data.project;
     wx.navigateTo({
-      url: '../GIS/GIS?token=' + token + '&project_id=' + project.project_id
+      url: '../GIS/GIS?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
     })
   },
   gjPos: function () {
     var that = this;
     var project = that.data.project;
     wx.navigateTo({
-      url: '../GIS/GIS?token=' + token + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+      url: '../GIS/GIS?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+    })
+  }, 
+  changeP: function () {
+    var that = this;
+    var project = that.data.project;
+    wx.navigateTo({
+      url: '../../project/project?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
     })
   }
 })

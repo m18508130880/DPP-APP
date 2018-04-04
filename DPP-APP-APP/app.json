@@ -6,7 +6,8 @@
     "pages/user/GJInfo/GJInfo",
     "pages/user/GXInfo/GXInfo",
     "pages/user/Alert/Alert",
-    "pages/user/GJPos/GJPos"
+    "pages/user/GJPos/GJPos",
+    "pages/user/picker/picker"
   ],
   "window":{
     "backgroundTextStyle":"dark",
