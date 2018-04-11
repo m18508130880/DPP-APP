@@ -44,51 +44,36 @@ public class DevGJBean extends RmiBean
 			json.setUrl(Url);
 			json.setRst(CommUtil.IntToStringLeftFillZero(
 					MsgBean.STA_FAILED, 4));
+			List<Object> CData = new ArrayList<Object>();
 			if (TokenList.containsKey(Token)) {
 				msgBean = pRmi.RmiExec(Cmd, this, 0, 25);
 				switch (Cmd) {
 				case 0:
 					// 获取管井信息
 					if (msgBean.getStatus() == MsgBean.STA_SUCCESS) {
-						List<Object> CData = new ArrayList<Object>();
 						ArrayList<?> devGJList = (ArrayList<?>) msgBean
 								.getMsg();
-						Iterator<?> devGJIterator = devGJList.iterator();
-						while (devGJIterator.hasNext()) {
-							DevGJBean RealJson = (DevGJBean) devGJIterator
-									.next();
-							DevGJJsonBean devGJJson = new DevGJJsonBean();
-							devGJJson.setId(RealJson.getId());
-							devGJJson.setLongitude(RealJson.getLongitude());
-							devGJJson.setLatitude(RealJson.getLatitude());
-							devGJJson.setTop_Height(RealJson.getTop_Height());
-							devGJJson.setBase_Height(RealJson.getBase_Height());
-							devGJJson.setSize(RealJson.getSize());
-							devGJJson.setIn_Id(RealJson.getIn_Id());
-							devGJJson.setOut_Id(RealJson.getOut_Id());
-							devGJJson.setMaterial(RealJson.getMaterial());
-							devGJJson.setFlag(RealJson.getFlag());
-							devGJJson.setData_Lev(RealJson.getData_Lev());
-							devGJJson.setCurr_Data(RealJson.getCurr_Data());
-							devGJJson.setSign(RealJson.getSign());
-							devGJJson.setProject_Id(RealJson.getProject_Id());
-							devGJJson.setProject_Name(RealJson.getProject_Name());
-							devGJJson.setEquip_Id(RealJson.getEquip_Id());
-							devGJJson.setEquip_Name(RealJson.getEquip_Name());
-							devGJJson.setEquip_Height(RealJson.getEquip_Height());
-							devGJJson.setEquip_Tel(RealJson.getEquip_Tel());
-							devGJJson.setIn_Img(RealJson.getIn_Img());
-							devGJJson.setOut_Img(RealJson.getOut_Img());
-							devGJJson.setEquip_Time(RealJson.getEquip_Time());
-							devGJJson.setRoad(RealJson.getRoad());
-							devGJJson.setRotation(RealJson.getRotation());
-							
-							CData.add(devGJJson);
-						}
+						CData = objToJson(devGJList, CData);
 						json.setCData(CData);
 						json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_SUCCESS, 4));
 					}
 					break;
+				case 1:
+					ArrayList<?> gjObj = (ArrayList<?>)msgBean.getMsg();
+					
+					DevGXBean tmpGXBean = new DevGXBean();
+					tmpGXBean.setProject_Id(Project_Id);
+					tmpGXBean.setSubsys_Id(Subsys_Id);
+					msgBean = pRmi.RmiExec(1, tmpGXBean, 0, 25);
+					ArrayList<?> gxObj = (ArrayList<?>)msgBean.getMsg();
+					
+					//tmpGXBean.objToJson(gxObj, CData);
+					GjGxUtil analog = new GjGxUtil();
+					ArrayList<?> gjList = analog.AnalogGJList(gjObj, gxObj, Subsys_Id+"001");
+					System.out.println("gjList.size:"+gjList.size());
+					CData = objToJson(gjList, CData);
+					json.setCData(CData);
+					json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_SUCCESS, 4));
 				}
 			} else {
 				// 鉴权失败
@@ -102,7 +87,7 @@ public class DevGJBean extends RmiBean
 			output.write(jsonObj.toString());
 			output.flush();
 			
-			//System.out.println("AppGisJson:" + jsonObj.toString() + ";");
+			System.out.println("AppGisJson:" + jsonObj.toString() + ";");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -111,6 +96,41 @@ public class DevGJBean extends RmiBean
 		
 	}
 
+	public List<Object> objToJson(ArrayList<?> devGJList, List<Object> CData){
+		Iterator<?> devGJIterator = devGJList.iterator();
+		while (devGJIterator.hasNext()) {
+			DevGJBean RealJson = (DevGJBean) devGJIterator
+					.next();
+			DevGJJsonBean devGJJson = new DevGJJsonBean();
+			devGJJson.setId(RealJson.getId());
+			devGJJson.setLongitude(RealJson.getLongitude());
+			devGJJson.setLatitude(RealJson.getLatitude());
+			devGJJson.setTop_Height(RealJson.getTop_Height());
+			devGJJson.setBase_Height(RealJson.getBase_Height());
+			devGJJson.setSize(RealJson.getSize());
+			devGJJson.setIn_Id(RealJson.getIn_Id());
+			devGJJson.setOut_Id(RealJson.getOut_Id());
+			devGJJson.setMaterial(RealJson.getMaterial());
+			devGJJson.setFlag(RealJson.getFlag());
+			devGJJson.setData_Lev(RealJson.getData_Lev());
+			devGJJson.setCurr_Data(RealJson.getCurr_Data());
+			devGJJson.setSign(RealJson.getSign());
+			devGJJson.setProject_Id(RealJson.getProject_Id());
+			devGJJson.setProject_Name(RealJson.getProject_Name());
+			devGJJson.setEquip_Id(RealJson.getEquip_Id());
+			devGJJson.setEquip_Name(RealJson.getEquip_Name());
+			devGJJson.setEquip_Height(RealJson.getEquip_Height());
+			devGJJson.setEquip_Tel(RealJson.getEquip_Tel());
+			devGJJson.setIn_Img(RealJson.getIn_Img());
+			devGJJson.setOut_Img(RealJson.getOut_Img());
+			devGJJson.setEquip_Time(RealJson.getEquip_Time());
+			devGJJson.setRoad(RealJson.getRoad());
+			devGJJson.setRotation(RealJson.getRotation());
+			
+			CData.add(devGJJson);
+		}
+		return CData;
+	}
 	/**
 	 * 获取相应sql语句
 	 * 
@@ -120,13 +140,20 @@ public class DevGJBean extends RmiBean
 		String Sql = "";
 		switch (pCmd)
 		{
-			case 0:// 查询（类型&项目）
-				Sql = " select t.id, t.Longitude, t.latitude, t.top_Height, t.base_height, t.Size, t.in_id, t.out_id, t.Material, t.Flag, t.Data_Lev, round((t.curr_data),2) , t.sign , t.project_id, t.project_name, t.equip_id ,t.equip_name ,t.equip_height ,t.equip_tel, t.In_Img, t.Out_Img, t.equip_time, t.road, t.rotation" + 
+		case 0:// 查询（类型&项目）
+			Sql = " select t.id, t.Longitude, t.latitude, t.top_Height, t.base_height, t.Size, t.in_id, t.out_id, t.Material, t.Flag, t.Data_Lev, round((t.curr_data),2) , t.sign , t.project_id, t.project_name, t.equip_id ,t.equip_name ,t.equip_height ,t.equip_tel, t.In_Img, t.Out_Img, t.equip_time, t.road, t.rotation" + 
 					" from view_dev_gj t " +
 					" where t.project_id = '" + Project_Id + "' " + 
 					" order by t.id  ";
-				break;
-			
+			break;
+		case 1:// 查询（项目&子系统）
+			Sql = " select t.id, t.Longitude, t.latitude, t.top_Height, t.base_height, t.Size, t.in_id, t.out_id, t.Material, t.Flag, t.Data_Lev, round((t.curr_data),2) , t.sign , t.project_id, t.project_name, t.equip_id ,t.equip_name ,t.equip_height ,t.equip_tel, t.In_Img, t.Out_Img, t.equip_time, t.road, t.rotation" + 
+					" from view_dev_gj t " + 
+					" where t.project_id = '" + Project_Id + "'" + 
+					" and substr(t.id, 3, 3) = '" + Subsys_Id.substring(2) + "'" + 
+					" order by t.id";
+			break;
+
 		}
 		return Sql;
 	}
@@ -209,6 +236,7 @@ public class DevGJBean extends RmiBean
 			
 			setCmd(CommUtil.StrToInt(request.getParameter("Cmd")));
 			setToken(CommUtil.StrToGB2312(request.getParameter("Token")));
+			setSubsys_Id(CommUtil.StrToGB2312(request.getParameter("Subsys_Id")));
 		}
 		catch (Exception Exp)
 		{

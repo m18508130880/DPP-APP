@@ -48,36 +48,13 @@ public class DevGXBean extends RmiBean
 				msgBean = pRmi.RmiExec(Cmd, this, 0, 25);
 				switch (Cmd) {
 				case 0:
-					// 获取管井信息
+				case 1:
+					// 获取管线信息
 					if (msgBean.getStatus() == MsgBean.STA_SUCCESS) {
 						List<Object> CData = new ArrayList<Object>();
 						ArrayList<?> devGXList = (ArrayList<?>) msgBean
 								.getMsg();
-						Iterator<?> devGXIterator = devGXList.iterator();
-						while (devGXIterator.hasNext()) {
-							DevGXBean RealJson = (DevGXBean) devGXIterator
-									.next();
-							DevGXJsonBean devGXJson = new DevGXJsonBean();
-							devGXJson.setId(RealJson.getId());
-							devGXJson.setDiameter(RealJson.getDiameter());
-							devGXJson.setLength(RealJson.getLength());
-							devGXJson.setStart_Id(RealJson.getStart_Id());
-							devGXJson.setEnd_Id(RealJson.getEnd_Id());
-							devGXJson.setStart_Height(RealJson.getStart_Height());
-							devGXJson.setEnd_Height(RealJson.getEnd_Height());
-							devGXJson.setMaterial(RealJson.getMaterial());
-							devGXJson.setBuried_Year(RealJson.getBuried_Year());
-							devGXJson.setData_Lev(RealJson.getData_Lev());
-							devGXJson.setProject_Id(RealJson.getProject_Id());
-							devGXJson.setProject_Name(RealJson.getProject_Name());
-							devGXJson.setEquip_Id(RealJson.getEquip_Id());
-							devGXJson.setEquip_Name(RealJson.getEquip_Name());
-							devGXJson.setCurr_Data(RealJson.getCurr_Data());
-							devGXJson.setRoad(RealJson.getRoad());
-							devGXJson.setFlag(RealJson.getFlag());
-							
-							CData.add(devGXJson);
-						}
+						CData = objToJson(devGXList, CData);
 						json.setCData(CData);
 						json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_SUCCESS, 4));
 					}
@@ -103,18 +80,54 @@ public class DevGXBean extends RmiBean
 		}
 	}
 	
+	public List<Object> objToJson(ArrayList<?> devGXList, List<Object> CData){
+		Iterator<?> devGXIterator = devGXList.iterator();
+		while (devGXIterator.hasNext()) {
+			DevGXBean RealJson = (DevGXBean) devGXIterator
+					.next();
+			DevGXJsonBean devGXJson = new DevGXJsonBean();
+			devGXJson.setId(RealJson.getId());
+			devGXJson.setDiameter(RealJson.getDiameter());
+			devGXJson.setLength(RealJson.getLength());
+			devGXJson.setStart_Id(RealJson.getStart_Id());
+			devGXJson.setEnd_Id(RealJson.getEnd_Id());
+			devGXJson.setStart_Height(RealJson.getStart_Height());
+			devGXJson.setEnd_Height(RealJson.getEnd_Height());
+			devGXJson.setMaterial(RealJson.getMaterial());
+			devGXJson.setBuried_Year(RealJson.getBuried_Year());
+			devGXJson.setData_Lev(RealJson.getData_Lev());
+			devGXJson.setProject_Id(RealJson.getProject_Id());
+			devGXJson.setProject_Name(RealJson.getProject_Name());
+			devGXJson.setEquip_Id(RealJson.getEquip_Id());
+			devGXJson.setEquip_Name(RealJson.getEquip_Name());
+			devGXJson.setCurr_Data(RealJson.getCurr_Data());
+			devGXJson.setRoad(RealJson.getRoad());
+			devGXJson.setFlag(RealJson.getFlag());
+			
+			CData.add(devGXJson);
+		}
+		return CData;
+	}
+	
 	public String getSql(int pCmd)
 	{  
 		String Sql = "";
 		switch (pCmd)
 		{
-			case 0://查询（类型&项目）
-				Sql = " select t.id, t.diameter, t.length, t.start_id, t.end_id, t.start_height, t.end_height, t.material, t.buried_year, t.data_lev, t.project_id, t.project_name, t.equip_id, t.equip_name ,round((t.curr_data),2), t.road, t.flag" +
+		case 0://查询（类型&项目）
+			Sql = " select t.id, t.diameter, t.length, t.start_id, t.end_id, t.start_height, t.end_height, t.material, t.buried_year, t.data_lev, t.project_id, t.project_name, t.equip_id, t.equip_name ,round((t.curr_data),2), t.road, t.flag" +
 					" from view_dev_gx t " +		
-		    	 	" where t.project_id = '" + Project_Id + "' " +
-	 	 		    " order by t.id ";
-				break;
-		    
+					" where t.project_id = '" + Project_Id + "' " +
+					" order by t.id ";
+			break;
+		case 1://查询（项目&子系统）
+			Sql = " select t.id, t.diameter, t.length, t.start_id, t.end_id, t.start_height, t.end_height, t.material, t.buried_year, t.data_lev, t.project_id, t.project_name, t.equip_id, t.equip_name ,round((t.curr_data),2), t.road, t.flag" +
+					" from view_dev_gx t " +	
+					" where t.project_id = '" + Project_Id + "'" + 
+					" and substr(t.id, 3, 3) = '"+ Subsys_Id.substring(2,5) +"'" +
+					" order by t.id ";
+			break;
+
 		}
 		return Sql;
 	}

@@ -94,7 +94,7 @@ public class AlertInfoBean extends RmiBean
 			output.write(jsonObj.toString());
 			output.flush();
 			
-			//System.out.println("AppGisJson:" + jsonObj.toString() + ";");
+			System.out.println("AppGisJson:" + jsonObj.toString() + ";");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -189,6 +189,8 @@ public class AlertInfoBean extends RmiBean
 			setDes(CommUtil.StrToGB2312(request.getParameter("Des")));
 			setLongitude(CommUtil.StrToGB2312(request.getParameter("Longitude")));
 			setLatitude(CommUtil.StrToGB2312(request.getParameter("Latitude")));
+			
+			setToken(CommUtil.StrToGB2312(request.getParameter("Token")));
 		}
 		catch (Exception Exp)
 		{

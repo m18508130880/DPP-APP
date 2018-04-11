@@ -171,14 +171,14 @@ Page({
     var that = this;
     var project = that.data.project;
     wx.navigateTo({
-      url: '../GIS/GIS?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+      url: '../Alert/Alert?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
     })
   },
   gjPos: function () {
     var that = this;
     var project = that.data.project;
     wx.navigateTo({
-      url: '../GIS/GIS?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+      url: '../GJPos/GJPos?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
     })
   }, 
   changeP: function () {

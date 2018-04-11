@@ -1,10 +1,11 @@
 // pages/user/data/data.js
 var app = getApp()
 var token = "";
+var isOK = false;
 Page({
   data: {
-    gjName: [],
-    gjList: [],
+    alert: [],
+    select: true,
     project: [],
     BDate: '2017-05-05',
     EDate: '2017-05-05'
@@ -12,36 +13,41 @@ Page({
   onLoad: function (str) {  //初始化
     var that = this;
     var project_Id = str.project_id;
+    that.setData({
+      project: {
+        uId: str.uId,
+        project_id: project_Id,
+        lng: str.lng,
+        lat: str.lat
+      }
+    })
     token = str.token;
+    console.log(token)
     wx.request({
-      url: 'http://118.31.78.234/dpp-app/GJ_Info.do',
+      url: 'http://118.31.78.234/dpp-app/Alert_Info.do',
       data: {
         Cmd: "0",
-        Project_Id: project_Id,
-        Token: token
+        Token: token,
+        Project_Id: project_Id
       },
       method: 'GET',
       success: function (res) {
         if (res.data.rst = "0000") {
           var dataObj = res.data.cData;
-          console.log(dataObj)
-          var gjNames;
-          var gjLists;
+          console.log(dataObj);
+          var alerts = new Array();
           for (var i = 0; i < dataObj.length; i++) {
-            var gjN = {
-              id: dataObj[i].id
+            alerts[i] = {
+              attr_Name: dataObj[i].attr_Name,
+              cTime: dataObj[i].cTime,
+              curr_Data: dataObj[i].curr_Data,
+              des: dataObj[i].des,
+              gJ_Id: dataObj[i].gJ_Id,
             }
-            var gjL = {
-              id: dataObj[i].id
-            }
-            gjNames.push(gjN);
-            gjLists.push(gjL);
           }
-          console.log(gjNames)
-          console.log(gjLists)
+          console.log(alerts)
           that.setData({
-            gjName: gjNames,
-            gjList: gjLists
+            alert: alerts
           })
         }
       },
@@ -51,6 +57,56 @@ Page({
       },
       complete: function () {
       }
+    })
+  },
+  changeF: function (e) {
+    var that = this;
+    console.log(e)
+    if (isOK) {
+      that.setData({
+        select: isOK
+      })
+      isOK = !isOK;
+    } else {
+      that.setData({
+        select: isOK
+      })
+      isOK = !isOK;
+    }
+  },
+  gis: function () {
+    var that = this;
+    var project = that.data.project;
+    wx.navigateTo({
+      url: '../GIS/GIS?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+    })
+  },
+  gjInfo: function () {
+    var that = this;
+    var project = that.data.project;
+    wx.navigateTo({
+      url: '../GJInfo/GJInfo?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+    })
+  },
+  gxInfo: function () {
+    var that = this;
+    var project = that.data.project;
+    wx.navigateTo({
+      url: '../GXInfo/GXInfo?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+    })
+  },
+  alert: function () {
+    var that = this;
+    var project = that.data.project;
+    wx.navigateTo({
+      url: '../Alert/Alert?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+    })
+  },
+  changeP: function () {
+    var that = this;
+    var project = that.data.project;
+    wx.navigateTo({
+      url: '../../project/project?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
     })
   },
 

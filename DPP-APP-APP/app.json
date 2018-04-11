@@ -7,6 +7,7 @@
     "pages/user/GXInfo/GXInfo",
     "pages/user/Alert/Alert",
     "pages/user/GJPos/GJPos",
+    "pages/user/pieChart/pieChart",
     "pages/user/picker/picker"
   ],
   "window":{

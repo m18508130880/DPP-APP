@@ -5,10 +5,11 @@
     </block>
   </scroll-view>  -->
   <view class="scroll-tab">
-    <view class="data-top">选择系统:</view>
+    <view class="data-top">子系统:</view>
     <picker bindchange="bindCasPickerChange" range="{{gjName}}">
         <text class="data-value">{{gjName[gjIndex]}}</text>
     </picker>
+    <view class="graphButton" bindtap="graphCut">图表</view>
     <text class="data-gjSum">管井数量:{{gjSum}}</text>
   </view>
   <scroll-view scroll-y="true" class="table">
@@ -53,4 +54,15 @@
     <view class="scroll_f" bindtap="changeP">选择项目</view>
   </scroll-view>
 
+  <view class="graphCut-main" style="display:{{graphCut}}">
+    <view class="graphCut">
+      系统{{gjName[gjIndex]}}:001--006剖面图
+      <scroll-view scroll-x="true" class="graph-bg">
+          <ec-canvas id="mychart-dom-bar" style="top:0;width:{{graphWidth}}px;height:92%;border:solid red 1px" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
+          
+      </scroll-view>
+    </view>
+    <view class="graphCut-no" bindtap="graphCutNo"></view>
+  </view>
+  
 </view>

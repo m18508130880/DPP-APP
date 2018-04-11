@@ -43,7 +43,7 @@ Page({
           status = "成功";
           icon = "success";
           wx.navigateTo({
-            //url: '../user/picker/picker'
+            //url: '../user/pieChart/pieChart'
             url: '../project/project?token=' + res.data.token + '&uId=' + res.data.manage_Role
           })
         }
