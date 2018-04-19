@@ -4,6 +4,13 @@ var app = getApp()
 var token = "";
 var isOK = false;
 var project_Id = "";
+function writeStatus(status, icon) {
+  // 弹出提示框
+  wx.showToast({
+    title: status,
+    icon: icon
+  })
+}
 Page({
   data: {
     gjName: [],
@@ -11,6 +18,9 @@ Page({
     gjSum: 0,
     gjAll: [],
     gjList: [],
+    gjIdList: [],
+    startId: "",
+    endtId: "",
     project: [],
     select: true, 
     graphCut: "none",
@@ -43,7 +53,7 @@ Page({
       },
       method: 'GET',
       success: function (res) {
-        if (res.data.rst = "0000") {
+        if (res.data.rst == "0000") {
           var dataObj = res.data.cData;
           //console.log(dataObj)
           var gjNames = new Array();
@@ -76,6 +86,12 @@ Page({
             gjSum: dataObj.length
           })
         }
+        else if (res.data.rst = "1005") {
+          wx.reLaunch({
+            url: "../../index/index"
+          })
+          writeStatus("操作超时", "loading");
+        }
       },
       fail: function (res) {
         console.log("fail")
@@ -85,22 +101,22 @@ Page({
       }
     })
   },
-  graphCut: function () {
+  graphCut: function (id) {
     var that = this;
-    var Subsys_Id = that.data.gjName[that.data.gjIndex];
-    if (Subsys_Id == "全部系统") { return; }
+    console.log(id)
     var gjObj;
     wx.request({
       url: 'http://118.31.78.234/dpp-app/GJ_Info.do',
       data: {
         Cmd: "1",
         Project_Id: project_Id,
-        Subsys_Id: Subsys_Id,
+        Subsys_Id: id,
         Token: token
       },
       method: 'GET',
       success: function (res) {
-        if (res.data.rst = "0000") {
+        console.log(res.data)
+        if (res.data.rst == "0000") {
           gjObj = res.data.cData;
           if (gjObj != null) {
             wx.request({
@@ -108,7 +124,7 @@ Page({
               data: {
                 Cmd: "1",
                 Project_Id: project_Id,
-                Subsys_Id: Subsys_Id,
+                Subsys_Id: id,
                 Token: token
               },
               method: 'GET',
@@ -126,6 +142,11 @@ Page({
               }
             })
           }
+        }
+        else if (res.data.rst == "1005") {
+          wx.reLaunch({
+            url: '../../index/index'
+          })
         }
       },
       fail: function (res) {
@@ -194,26 +215,38 @@ Page({
     var gjA = that.data.gjAll;
     var count = 0;
     var gjL = [];
+    var gjI = [];
+    gjI[count] = "请选择开始管井号";
     for (var i = 0; i < gjA.length; i ++) {
       if (gjA[i].id.indexOf(gjN) > -1) {
         gjL[count] = gjA[i];
+        gjI[count+1] = gjA[i].id;
         count ++;
       }
     }
     this.setData({
       gjIndex: e.detail.value,
       gjList: gjL,
-      gjSum: count
+      gjSum: count,
+      gjIdList: gjI
     })
     if (count == 0) {
       this.setData({
         gjIndex: e.detail.value,
         gjList: gjA,
-        gjSum: gjA.length
+        gjSum: gjA.length,
+        gjIdList: gjI
       })
     }
   },
-  
+  bindCasPickerChange1: function (e) {
+    var that = this;
+    if (that.data.gjName[e.detail.value] == "全部系统") {return;}
+    console.log(e.detail.value)
+    var id = that.data.gjIdList[e.detail.value];
+    console.log(id);
+    that.graphCut(id)
+  },
   graphCutNo: function () {
     var that = this;
     that.setData({
@@ -245,6 +278,7 @@ Page({
       }
     }
     width = parseInt(width)*5;
+    if (width < 400) { width = 400; }
     that.setData ({
       graphWidth: width
     })
@@ -260,7 +294,10 @@ Page({
       });
       setOption(chart, gjList, gxList);
       that.setData({
-        graphCut: ""
+        graphCut: "",
+        startId: gjList[0].id.substr(5, 8),
+        endId: gjList[gjList.length-1].id.substr(5, 8)
+
       })
       // 将图表实例绑定到 this 上，可以在其他成员函数（如 dispose）中访问
       that.chart = chart;
@@ -303,6 +340,8 @@ Page({
 
 
 function setOption(chart, gjList, gxList) {
+  var xAxArray = new Array();
+  var xAxName = new Array();
   var dataLineA = new Array();    // 井顶部-路面				虚线
   var dataLineB = new Array();	  // 管线顶部					实线
   var dataLineC = new Array();	  // 管线底部					实线
@@ -314,27 +353,28 @@ function setOption(chart, gjList, gxList) {
   var minHeight = 1000.0; //最小坐标值
   for (var i = 0; i < gjList.length; i ++) {
     var gj = gjList[i];     // 获得当前管井
-    var gx;              
+    var gx;      
+    if (gj.top_Height * 1 > 0) {
+      dataBarA.push([xAx, gj.top_Height]);
+    } else {
+      _dataBarA.push([xAx, gj.top_Height]);
+    }
+    if (gj.base_Height > 0) {
+      dataBarB.push([xAx, gj.base_Height]);
+    } else {
+      _dataBarB.push([xAx, gj.base_Height]);
+    }
+    dataLineA.push([xAx, gj.top_Height]); //获得管井顶高-地面
+    var xAxObj = new Object();
+    xAxObj.xAx = xAx;
+    xAxObj.tId = gj.id;
+    xAxArray.push(xAxObj);
     for (var j = 0; j < gxList.length; j ++) {
       if (gj.out_Id == gxList[j].id) {
         gx = gxList[j];     // 获得当前管线
-        if (gj.top_Height*1 > 0) {
-          dataBarA.push([xAx, gj.top_Height]);
-        } else {
-          _dataBarA.push([xAx, gj.top_Height]);
-        }
-        if (gj.base_Height > 0) {
-          dataBarB.push([xAx, gj.base_Height]);  
-        } else {
-          _dataBarB.push([xAx, gj.base_Height]); 
-        }
-        dataLineA.push([xAx, gj.top_Height]); //获得管井顶高-地面
         dataLineB.push([xAx, gx.start_Height*1 + gx.diameter / 1000]);  //获得管线起点顶高
         dataLineC.push([xAx, gx.start_Height]); //获得管线起点底高
-
-
         xAx += gx.length*1;
-        console.log("i[" + i + "]L[" + gjList.length+"]")
         if (i < gjList.length) { //最后一个管线没有终点
           dataLineB.push([xAx, gx.end_Height * 1 + gx.diameter / 1000]);  //获得管线终点顶高
           dataLineC.push([xAx, gx.end_Height]); //获得管线终点底高
@@ -343,22 +383,8 @@ function setOption(chart, gjList, gxList) {
       }
     }
   }
-  var seriesLabel = {
-    normal: {
-      show: true,
-      textBorderColor: '#333',
-      textBorderWidth: 2
-    }
-  }
-  // console.log(dataLineA)
-  // console.log(dataLineB)
-  // console.log(dataLineC)
-  // console.log(dataBarA)
-  // console.log(dataBarB)
-  // console.log(_dataBarA)
-  // console.log(_dataBarB)
+ 
   minHeight = parseInt(minHeight);
-  //console.log(minHeight)
   const option = {
     xAxis: {
       type: "value"
@@ -373,7 +399,16 @@ function setOption(chart, gjList, gxList) {
       lineStyle: { color: "#778899" },
       itemStyle: { color: "#778899" },
       symbol: 'circle',
-      label: seriesLabel,
+      label: {
+        show: true,
+        formatter: function (params) {
+          for (var i = 0; i < xAxArray.length; i ++) {
+            if (xAxArray[i].xAx == params.data[0]) {
+              return xAxArray[i].tId.substr(5, 8)
+            }
+          }
+        }
+      },
       data: dataLineA
     }, {
       type: 'line',

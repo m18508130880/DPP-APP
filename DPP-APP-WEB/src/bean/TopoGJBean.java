@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +35,7 @@ public class TopoGJBean extends RmiBean {
 
 	public void ExecCmd(HttpServletRequest request, HttpServletResponse response,
 			Rmi pRmi, boolean pFromZone, String Url,
-			HashMap<String, String> TokenList) throws ServletException,
+			HashMap<String, Date> TokenList) throws ServletException,
 			IOException {
 		PrintWriter output = null;
 		try {
@@ -45,36 +46,17 @@ public class TopoGJBean extends RmiBean {
 			json.setRst(CommUtil.IntToStringLeftFillZero(
 					MsgBean.STA_FAILED, 4));
 			if (TokenList.containsKey(Token)) {
+				TokenList.put(Token, new Date());
+				List<Object> CData = new ArrayList<Object>();
 				msgBean = pRmi.RmiExec(Cmd, this, 0, 25);
 				switch (Cmd) {
 				case 0:
+				case 1:
 					// 获取管井信息
 					if (msgBean.getStatus() == MsgBean.STA_SUCCESS) {
-						List<Object> CData = new ArrayList<Object>();
 						ArrayList<?> topoGJList = (ArrayList<?>) msgBean
 								.getMsg();
-						Iterator<?> topoGJIterator = topoGJList.iterator();
-						while (topoGJIterator.hasNext()) {
-							TopoGJBean RealJson = (TopoGJBean) topoGJIterator
-									.next();
-							TopoGJJsonBean topoGJJson = new TopoGJJsonBean();
-							topoGJJson.setId(RealJson.getId());
-							topoGJJson.setLongitude(RealJson.getLongitude());
-							topoGJJson.setLatitude(RealJson.getLatitude());
-							topoGJJson.setWX_Lng(RealJson.getWX_Lng());
-							topoGJJson.setWX_Lat(RealJson.getWX_Lat());
-							topoGJJson.setFlag(RealJson.getFlag());
-							topoGJJson.setSign(RealJson.getSign());
-							topoGJJson.setBase_Height(RealJson.getBase_Height());
-							topoGJJson.setTop_Height(RealJson.getTop_Height());
-							topoGJJson.setProject_Id(RealJson.getProject_Id());
-							topoGJJson.setEquip_Id(RealJson.getEquip_Id());
-							topoGJJson.setEquip_Height(RealJson.getEquip_Height());
-							topoGJJson.setCTime(RealJson.getCTime());
-							topoGJJson.setCurr_Data(RealJson.getCurr_Data());
-							
-							CData.add(topoGJJson);
-						}
+						CData = objToJson(topoGJList, CData);
 						json.setCData(CData);
 						json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_SUCCESS, 4));
 					}
@@ -99,7 +81,32 @@ public class TopoGJBean extends RmiBean {
 			output.close();
 		}
 	}
-
+	public List<Object> objToJson(ArrayList<?> topoGJList, List<Object> CData){
+		Iterator<?> topoGJIterator = topoGJList.iterator();
+		while (topoGJIterator.hasNext()) {
+			TopoGJBean RealJson = (TopoGJBean) topoGJIterator
+					.next();
+			TopoGJJsonBean topoGJJson = new TopoGJJsonBean();
+			topoGJJson.setId(RealJson.getId());
+			topoGJJson.setLongitude(RealJson.getLongitude());
+			topoGJJson.setLatitude(RealJson.getLatitude());
+			topoGJJson.setWX_Lng(RealJson.getWX_Lng());
+			topoGJJson.setWX_Lat(RealJson.getWX_Lat());
+			topoGJJson.setFlag(RealJson.getFlag());
+			topoGJJson.setSign(RealJson.getSign());
+			topoGJJson.setBase_Height(RealJson.getBase_Height());
+			topoGJJson.setTop_Height(RealJson.getTop_Height());
+			topoGJJson.setProject_Id(RealJson.getProject_Id());
+			topoGJJson.setEquip_Id(RealJson.getEquip_Id());
+			topoGJJson.setEquip_Height(RealJson.getEquip_Height());
+			topoGJJson.setCTime(RealJson.getCTime());
+			topoGJJson.setCurr_Data(RealJson.getCurr_Data());
+			
+			CData.add(topoGJJson);
+		}
+		return CData;
+		
+	}
 	/**
 	 * 获取相应sql语句
 	 * 
@@ -111,7 +118,15 @@ public class TopoGJBean extends RmiBean {
 			Sql = " select t.id, t.longitude, t.latitude, t.wx_lng, t.wx_lat, t.flag, t.sign, t.project_id, t.equip_id, t.top_height, t.equip_height, t.curr_data, t.ctime, t.road, t.rotation, t.attr_id, t.des"
 					+ " from view_topo_gj t "
 					+ " where instr('" + Project_Id + "', project_id) > 0 "
-					+ " and road like concat('%','" + Road + "','%') "
+					//+ " and road like concat('%','" + Road + "','%') "
+					+ " and sign = '1' "
+					+ " order by id";
+			break;
+		case 1:// 查询有设备的管井
+			Sql = " select t.id, t.longitude, t.latitude, t.wx_lng, t.wx_lat, t.flag, t.sign, t.project_id, t.equip_id, t.top_height, t.equip_height, t.curr_data, t.ctime, t.road, t.rotation, t.attr_id, t.des"
+					+ " from view_topo_gj t "
+					+ " where instr('" + Project_Id + "', project_id) > 0 "
+					+ " and LENGTH(equip_id) = 20"
 					+ " and sign = '1' "
 					+ " order by id";
 			break;

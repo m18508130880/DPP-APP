@@ -4,6 +4,13 @@ var iconWJ = "/image/map_wj_middle.gif";
 var iconYJ = "/image/map_yj_middle.gif";
 var gjArray;
 var isOK = false;
+function writeStatus(status, icon) {
+  // 弹出提示框
+  wx.showToast({
+    title: status,
+    icon: icon
+  })
+}
 Page({
   data: {
     select: true,

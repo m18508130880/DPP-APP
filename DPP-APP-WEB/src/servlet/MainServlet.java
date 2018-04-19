@@ -1,7 +1,11 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -14,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import rmi.Rmi;
 import util.CommUtil;
 import bean.AlertInfoBean;
+import bean.DataGJBean;
 import bean.DevGJBean;
 import bean.DevGXBean;
 import bean.TopoGJBean;
@@ -29,7 +34,7 @@ public class MainServlet extends HttpServlet
 	private String rmiUrl = null;
 	private Connect connect = null;
 	public ServletConfig Config;
-	public HashMap<String , String> TokenList = new HashMap<String , String>();
+	public HashMap<String , Date> TokenList = new HashMap<String , Date>();
 	
 	public final ServletConfig getServletConfig() 
 	{
@@ -81,6 +86,19 @@ public class MainServlet extends HttpServlet
         strUrl = str[str.length - 1];
         System.out.println("********************" + strUrl + "[" + request.getRemoteAddr() + "]");
         
+        Iterator<Entry<String, Date>> iter = TokenList.entrySet().iterator();
+        while (iter.hasNext()) {
+        	@SuppressWarnings("rawtypes")
+			Map.Entry entry = (Map.Entry) iter.next();
+        	Object key = entry.getKey();
+        	Date val = (Date) entry.getValue();
+        	long time = new Date().getTime() -  val.getTime();
+        	if(time/1000 > 2*60){
+        		TokenList.remove(key);
+        		System.out.println("rm["+key+"]["+time/1000+"]");
+        		
+        	}
+        }
         /**************************************微信小程序************************************************/
         if (strUrl.equalsIgnoreCase("Login.do"))						         	 	//登录
         	new UserInfoBean().Login(request, response, m_Rmi, strUrl, TokenList);		
@@ -106,6 +124,10 @@ public class MainServlet extends HttpServlet
         /***************************************告警列表**********************************************/
         else if (strUrl.equalsIgnoreCase("Alert_Info.do"))				        		//告警信息
         	new AlertInfoBean().ExecCmd(request, response, m_Rmi, false, strUrl, TokenList);
+        
+        /***************************************实时监测**********************************************/
+        else if (strUrl.equalsIgnoreCase("Real_Water_Lev.do"))				        			//实时监测-GIS
+        	new DataGJBean().ExecCmd(request, response, m_Rmi, false, strUrl, TokenList);
         
     }
     

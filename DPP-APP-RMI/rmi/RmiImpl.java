@@ -14,6 +14,7 @@ import util.CommUtil;
 import util.DBUtil;
 import util.MsgBean;
 import bean.AlertInfoBean;
+import bean.DataGJBean;
 import bean.DevGJBean;
 import bean.DevGXBean;
 import bean.ProjectInfoBean;
@@ -203,6 +204,9 @@ public class RmiImpl extends UnicastRemoteObject implements Rmi
 						break;
 					case RmiBean.RMI_ALERT:
 						rmiBean = new AlertInfoBean();
+						break;
+					case RmiBean.RMI_DATAGJ:
+						rmiBean = new DataGJBean();
 						break;
 				}
 				rmiBean.getData(rs);

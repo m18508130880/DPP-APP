@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +36,7 @@ public class AlertInfoBean extends RmiBean
 		super.className = "AlertInfoBean";
 	}
 
-	public void ExecCmd(HttpServletRequest request, HttpServletResponse response, Rmi pRmi, boolean pFromZone, String Url, HashMap<String , String> TokenList) throws ServletException, IOException
+	public void ExecCmd(HttpServletRequest request, HttpServletResponse response, Rmi pRmi, boolean pFromZone, String Url, HashMap<String , Date> TokenList) throws ServletException, IOException
 	{
 		PrintWriter output = null;
 		try {
@@ -46,6 +47,7 @@ public class AlertInfoBean extends RmiBean
 			json.setRst(CommUtil.IntToStringLeftFillZero(
 					MsgBean.STA_FAILED, 4));
 			if (TokenList.containsKey(Token)) {
+				TokenList.put(Token, new Date());
 				msgBean = pRmi.RmiExec(Cmd, this, 0, 25);
 				switch (Cmd) {
 				case 0:

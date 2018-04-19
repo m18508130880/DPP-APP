@@ -2,6 +2,13 @@ var app = getApp()
 var token = "";
 var iconPath = "../../image/marke.gif";
 var dataAll;
+function writeStatus(status, icon) {
+  // 弹出提示框
+  wx.showToast({
+    title: status,
+    icon: icon
+  })
+}
 Page({
   data: {
     center: [],
@@ -22,9 +29,9 @@ Page({
       },
       method: 'GET',
       success: function (res) {
-        if (res.data.rst = "0000") {
-          var dataObj = res.data.cData;
-          console.log(dataObj)
+        console.log(res.data)
+        if (res.data.rst == "0000") {
+          var dataObj = res.data.cData; 
           for (var i = 0; i < dataObj.length; i++) {
             var project = {
               uId: str.uId,
@@ -39,6 +46,12 @@ Page({
           that.setData({
             dataAll: dataAll
           })
+        }
+        else if (res.data.rst == "1005") {
+          wx.reLaunch({
+            url:'../index/index'
+          })
+          writeStatus("操作超时", "loading");
         }
       },
       fail: function (res) {

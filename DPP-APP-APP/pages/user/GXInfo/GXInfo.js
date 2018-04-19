@@ -2,6 +2,13 @@
 var app = getApp()
 var token = "";
 var isOK = false;
+function writeStatus(status, icon) {
+  // 弹出提示框
+  wx.showToast({
+    title: status,
+    icon: icon
+  })
+}
 Page({
   data: {
     gxName: [],
@@ -35,7 +42,8 @@ Page({
       },
       method: 'GET',
       success: function (res) {
-        if (res.data.rst = "0000") {
+        console.log(res.data)
+        if (res.data.rst == "0000") {
           var dataObj = res.data.cData;
           //console.log(dataObj);
           var gxNames = new Array();
@@ -71,6 +79,12 @@ Page({
             gxList: gxLists,
             gxSum: dataObj.length
           })
+        }
+        else if (res.data.rst == "1005") {
+          wx.reLaunch({
+            url: '../../index/index'
+          })
+          writeStatus("操作超时", "loading");
         }
       },
       fail: function (res) {

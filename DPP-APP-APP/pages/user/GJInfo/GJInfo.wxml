@@ -9,7 +9,7 @@
     <picker bindchange="bindCasPickerChange" range="{{gjName}}">
         <text class="data-value">{{gjName[gjIndex]}}</text>
     </picker>
-    <view class="graphButton" bindtap="graphCut">图表</view>
+    <picker class="graphButton" bindchange="bindCasPickerChange1" range="{{gjIdList}}">图表</picker>
     <text class="data-gjSum">管井数量:{{gjSum}}</text>
   </view>
   <scroll-view scroll-y="true" class="table">
@@ -56,13 +56,13 @@
 
   <view class="graphCut-main" style="display:{{graphCut}}">
     <view class="graphCut">
-      系统{{gjName[gjIndex]}}:001--006剖面图
+      <view style="text-align: center;">系统{{gjName[gjIndex]}}:{{startId}}-->{{endId}}剖面图</view>
       <scroll-view scroll-x="true" class="graph-bg">
-          <ec-canvas id="mychart-dom-bar" style="top:0;width:{{graphWidth}}px;height:92%;border:solid red 1px" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
+          <ec-canvas id="mychart-dom-bar" style="top:0;width:{{graphWidth}}px;height:92%;" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
           
       </scroll-view>
     </view>
-    <view class="graphCut-no" bindtap="graphCutNo"></view>
+    <image src='../../../image/no.gif' class="graphCut-no" bindtap="graphCutNo"></image>
   </view>
   
 </view>

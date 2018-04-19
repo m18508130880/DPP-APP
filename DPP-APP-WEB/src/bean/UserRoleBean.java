@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -39,7 +40,7 @@ public class UserRoleBean extends RmiBean {
 
 	public void ExecCmd(HttpServletRequest request,
 			HttpServletResponse response, Rmi pRmi, boolean pFromZone,
-			String Url, HashMap<String, String> TokenList)
+			String Url, HashMap<String, Date> TokenList)
 					throws ServletException, IOException {
 		PrintWriter output = null;
 		try {
@@ -49,6 +50,7 @@ public class UserRoleBean extends RmiBean {
 			json.setRst(CommUtil.IntToStringLeftFillZero(
 					MsgBean.STA_FAILED, 4));
 			if (TokenList.containsKey(Token)) {
+				TokenList.put(Token, new Date());
 				switch (Cmd) {
 				case 0:
 					// 获取管理权限
@@ -64,7 +66,6 @@ public class UserRoleBean extends RmiBean {
 						msgBean = pRmi.RmiExec(0, projectInfoBean, 0, 25);
 						ArrayList<?> projectList = (ArrayList<?>) msgBean.getMsg();
 						Iterator<?> projectIterator = projectList.iterator();
-						System.out.println("CData1["+CData+"]");
 						while (projectIterator.hasNext()) {
 							ProjectInfoBean RealJson = (ProjectInfoBean) projectIterator
 									.next();
@@ -82,7 +83,6 @@ public class UserRoleBean extends RmiBean {
 								CData.add(projectJson);
 							}
 						}
-						System.out.println("CData["+CData+"]");
 						json.setCData(CData);
 						json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_SUCCESS, 4));
 					}
@@ -100,7 +100,7 @@ public class UserRoleBean extends RmiBean {
 			output.write(jsonObj.toString());
 			output.flush();
 
-			System.out.println("AppGisJson:" + jsonObj.toString() + ";");
+			//System.out.println("AppGisJson:" + jsonObj.toString() + ";");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {

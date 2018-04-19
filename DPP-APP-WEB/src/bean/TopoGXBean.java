@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +35,7 @@ public class TopoGXBean extends RmiBean {
 
 	public void ExecCmd(HttpServletRequest request, HttpServletResponse response,
 			Rmi pRmi, boolean pFromZone, String Url,
-			HashMap<String, String> TokenList) throws ServletException,
+			HashMap<String, Date> TokenList) throws ServletException,
 			IOException {
 		PrintWriter output = null;
 		try {
@@ -45,6 +46,7 @@ public class TopoGXBean extends RmiBean {
 			json.setRst(CommUtil.IntToStringLeftFillZero(
 					MsgBean.STA_FAILED, 4));
 			if (TokenList.containsKey(Token)) {
+				TokenList.put(Token, new Date());
 				msgBean = pRmi.RmiExec(Cmd, this, 0, 0);
 				switch (Cmd) {
 				case 0:
@@ -103,7 +105,7 @@ public class TopoGXBean extends RmiBean {
 			Sql = " select t.id, t.start_id, t.end_id, t.road, t.flag, t.length"
 					+ " from dev_gx t "
 					+ " where instr('" + Project_Id + "', project_id) > 0 "
-					+ " and instr('" + Road + "', road) > 0 "
+					//+ " and instr('" + Road + "', road) > 0 "
 					+ " order by id";
 			break;
 		}
