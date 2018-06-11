@@ -1,8 +1,111 @@
 .bg_map{
   position: absolute;
   width: 100%;
-  height: 90%;
+  height: 100%;
 }
+
+.map_alert{
+  width: 96%;
+  left: 2%;
+  top: 1%;
+	height: 75rpx;
+	overflow: hidden;
+	margin: auto;
+	position: absolute;
+  background-color: #FF6347
+}
+@keyframes anis {
+	100% {
+	  transform:translateY(-100px)
+  }
+}
+.animate {
+  width: 80%;
+  left:0%;
+  text-align: left;
+  color: white;
+	animation: anis 10s linear infinite;
+  position: absolute;
+}
+@keyframes flash {
+	from {  
+    opacity: 0;  
+  }  
+  to {  
+    opacity: 1;  
+  }  
+}
+.flash {
+  top: 12rpx;
+  width: 20%;
+  right: 0%;
+  text-align: center;
+  color: white;
+	animation: flash 0.8s ease-out infinite;
+  position: absolute;
+}
+
+.alert{
+  width:100%;
+  height: 50rpx;
+}
+.location_image{
+  width:30px;
+  height:30px;
+  position: absolute;
+  bottom: 20%;
+  left: 5%;
+}
+.project_image{
+  width:30px;
+  height:30px;
+  position: absolute;
+  bottom: 30%;
+  left: 5%;
+}
+.big_image{
+  width:30px;
+  height:30px;
+  position: absolute;
+  bottom: 47%;
+  left: 5%;
+}
+.small_image{
+  width:30px;
+  height:30px;
+  position: absolute;
+  bottom: 40%;
+  left: 5%;
+}
+.tool_image{
+  width:30px;
+  height:30px;
+  position: absolute;
+  bottom: 20%;
+  right: 5%;
+}
+.data_image{
+  width:30px;
+  height:30px;
+  position: absolute;
+  bottom: 30%;
+  right: 5%;
+}
+
+.map_bottom{
+  width: 100%;
+	height: 105rpx;
+	overflow: hidden;
+	margin: auto;
+	position: absolute;
+  bottom: 0%;
+  text-align: center;
+  padding-top: 30rpx;
+  font-size: 45rpx;
+  color: white;
+  background-color: #268dcd
+}
+
 .bottom_button {
   position: absolute;
   width: 99%;
@@ -10,7 +113,9 @@
   height: 10%;
   text-align: center;
 }
-.button_f {
+
+.button_f { 
+  z-index:9999;
   position: absolute;
   top: 5%;
   left: 5%;

@@ -31,10 +31,11 @@ Page({
     var status = "";
     var icon = "";
     wx.request({
-      url: 'http://118.31.78.234/dpp-app/Login.do',
+      url:'https://www.cjsci-tech.com/dpp-app/Login.do',
+      //url: 'http://118.31.78.234/dpp-app/Login.do',
       data: {
-        Id: "user",
-        StrMd5: md5.hex_md5("user111111"),
+        Id: "cj",
+        StrMd5: md5.hex_md5("cj111111"),
         newDate: new Date()
       },
       header: { 'Content-Type': 'application/x-www-form-urlencoded'},
@@ -52,7 +53,7 @@ Page({
       }, 
       fail: function(res) {
         console.log("fail")
-        console.log(res.data)
+        console.log(res)
         status = "失败";
         icon = "loading";
       },

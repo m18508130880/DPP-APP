@@ -61,7 +61,6 @@ public class UserInfoBean extends RmiBean
 			json.setId(Id);
 			json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_FAILED, 4));
 			msgBean = pRmi.RmiExec(21, this, 0, 25);
-
 			//µ«»Î≥…π¶
 			if(msgBean.getStatus() == MsgBean.STA_SUCCESS)
 			{
@@ -82,11 +81,12 @@ public class UserInfoBean extends RmiBean
 				json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_SUCCESS, 4));
 
 				JSONObject jsonObj = (JSONObject) JSONObject.toJSON(json);
+		    	response.setCharacterEncoding("UTF-8");
 				output = response.getWriter();
 				output.write(jsonObj.toString());
 				output.flush();
 
-				//System.out.println("AppLoginJson:" + jsonObj.toString() + ";");
+				System.out.println("AppLoginJson:" + jsonObj.toString() + ";");
 			}
 		}
 		catch (Exception Exp)

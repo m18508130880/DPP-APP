@@ -1,4 +1,4 @@
-import * as echarts from '../../../ec-canvas/echarts';
+
 var app = getApp()
 var token = "";
 var iconWJ = "/image/map_wj_middle.gif";
@@ -22,7 +22,10 @@ Page({
     polyline: [],
     graphCut: "none",
     gjArray: [],
-    realWaterLev: []
+    realWaterLev: [],
+    alert: [],
+    scale: 17,
+    center:[]
   },
   onLoad: function (str) {
     var that = this;
@@ -33,12 +36,17 @@ Page({
         project_id: project_Id,
         lng: str.lng,
         lat: str.lat
+      },
+      center:{
+        lng: str.lng,
+        lat: str.lat
       }
     })
     token = str.token;
     gjArray = [];
     wx.request({
-      url: 'http://118.31.78.234/dpp-app/ToPo_GJ.do',
+      url: 'https://www.cjsci-tech.com/dpp-app/ToPo_GJ.do',
+      //url: 'http://118.31.78.234/dpp-app/ToPo_GJ.do',
       data: {
         Cmd: "0",
         Token: token,
@@ -84,7 +92,8 @@ Page({
             }
           }
           wx.request({
-            url: 'http://118.31.78.234/dpp-app/ToPo_GX.do',
+            url: 'https://www.cjsci-tech.com/dpp-app/ToPo_GX.do',
+            //url: 'http://118.31.78.234/dpp-app/ToPo_GX.do',
             data: {
               Cmd: "0",
               Token: token,
@@ -162,7 +171,50 @@ Page({
       },
       complete: function () {
       }
-    })
+    }),
+    //获取告警信息
+      wx.request({
+        url: 'https://www.cjsci-tech.com/dpp-app/Alert_Info.do',
+        //url: 'http://118.31.78.234/dpp-app/Alert_Info.do',
+        data: {
+          Cmd: "0",
+          Token: token,
+          Project_Id: project_Id
+        },
+        method: 'GET',
+        success: function (res) {
+          console.log(res.data);
+          if (res.data.rst == "0000") {
+            var dataObj = res.data.cData;
+            var alerts = new Array();
+            for (var i = 0; i < dataObj.length; i++) {
+              alerts[i] = {
+                attr_Name: dataObj[i].attr_Name,
+                cTime: dataObj[i].cTime,
+                curr_Data: dataObj[i].curr_Data,
+                des: dataObj[i].des,
+                gJ_Id: dataObj[i].gJ_Id,
+              }
+            }
+            console.log(alerts)
+            that.setData({
+              alert: alerts
+            })
+          }
+          else if (res.data.rst == "1005") {
+            wx.reLaunch({
+              url: '../../index/index'
+            })
+            writeStatus("操作超时", "loading");
+          }
+        },
+        fail: function (res) {
+          console.log("fail")
+          console.log(res)
+        },
+        complete: function () {
+        }
+      })
   },
   gjGet: function (objValue) {
     var that = this;
@@ -173,134 +225,45 @@ Page({
       }
     }
   },
-  graphCutNo: function () {
+  //点击缩放按钮 
+  zoom: function (e) {
     var that = this;
+    var scale = that.data.scale;
+    if (e.target.id === "small") {
+      --scale;
+    } else {
+      ++scale;
+    }
+    if (scale > 20 || scale < 6){return}
     that.setData({
-      graphCut: "none"
+      scale: scale
     })
-  },
-  markertap: function (e) {
-    console.log(e)
-    var gjId = e.markerId;
-    console.log(gjId)
+  }, 
+  // 定位自己位置
+  positioning(e) {
     var that = this;
-    wx.request({
-      url: 'http://118.31.78.234/dpp-app/GJ_Info.do',
-      data: {
-        Cmd: "2",
-        Project_Id: that.data.project.project_id,
-        Id: gjId,
-        Token: token
-      },
-      method: 'GET',
+    wx.getLocation({
+      type: 'gcj02', //返回可以用于wx.openLocation的经纬度  
       success: function (res) {
-        console.log(res.data)
-        if (res.data.rst == "0000") {
-          var gj = res.data.cData;
-          var baseWater = gj[0].top_Height - gj[0].equip_Height;
-          console.log(baseWater + "=" + gj[0].top_Height + "-" + gj[0].equip_Height)
-          wx.request({
-            url: 'http://118.31.78.234/dpp-app/Real_Water_Lev.do',
-            data: {
-              Cmd: "0",
-              Project_Id: that.data.project.project_id,
-              GJ_Id: gjId,
-              BDate: today,
-              EDate: today,
-              Token: token
-            },
-            method: 'GET',
-            success: function (res) {
-              console.log(res.data)
-              if (res.data.rst == "0000") {
-                var dataList = res.data.cData;
-                var gjList = new Array();
-                for (var i = 0; i < dataList.length; i ++) {
-                  var value = baseWater + dataList[i].value * 1;
-                  var gjObj = {
-                    id: dataList[i].gJ_Id,
-                    value: value.toFixed(3),
-                    ctime: dataList[i].cTime,
-                    maxCTime: dataList[i].max_CTime,
-                    minCTime: dataList[i].min_CTime,
-                  }
-                  gjList.push(gjObj);
-                }
-                that.ecComponent.init((canvas) => {
-                  // 获取组件的 canvas、width、height 后的回调函数
-                  // 在这里初始化图表
-                  const chart = echarts.init(canvas, null, {
-                    width: 600,
-                    height: 300
-                  });
-                  that.setData({
-                    graphCut: ""
-                  })
-                  setOption(chart, gjList, gj[0]);
-                  // 将图表实例绑定到 this 上，可以在其他成员函数（如 dispose）中访问
-                  that.chart = chart;
-                  // 注意这里一定要返回 chart 实例，否则会影响事件处理等
-                  return chart;
-                });
-              }
-              else if (res.data.rst = "1005") {
-                wx.reLaunch({
-                  url: "../../index/index"
-                })
-                writeStatus("操作超时", "loading");
-              }
-            },
-            fail: function (res) {
-              console.log("fail")
-              console.log(res)
-            },
-            complete: function () {
-            }
-          })
-        }
-        else if (res.data.rst = "1005") {
-          wx.reLaunch({
-            url: "../../index/index"
-          })
-          writeStatus("操作超时", "loading");
-        }
-      },
-      fail: function (res) {
-        console.log("fail")
-        console.log(res)
-      },
-      complete: function () {
+        var latitude = res.latitude
+        var longitude = res.longitude
+        that.setData({
+          center: {
+            lng: longitude,//经度   
+            lat: latitude,//纬度   
+          }
+        })
       }
     })
-    
   },
-  changeF: function (e) {
+  // 回到项目中心
+  project: function () {
     var that = this;
-    console.log(e)
-    if (isOK) {
-      that.setData({
-        select: isOK
-      })
-      isOK = !isOK;
-    } else {
-      that.setData({
-        select: isOK
-      })
-      isOK = !isOK;
-    }
-  },
-  gjInfo: function () {
-    var that = this;
-    var project = that.data.project;
-    wx.navigateTo({
-      url: '../GJInfo/GJInfo?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
-    })
-  },
-  gxInfo: function () {
-    var that = this;
-    var project = that.data.project;
-    wx.navigateTo({
-      url: '../GXInfo/GXInfo?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+    that.setData({
+      center: {
+        lng: that.data.project.lng,//经度   
+        lat: that.data.project.lat,//纬度   
+      }
     })
   },
   alert: function () {
@@ -310,29 +273,6 @@ Page({
       url: '../Alert/Alert?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
     })
   },
-  realWL: function () {
-    var that = this;
-    var project = that.data.project;
-    wx.navigateTo({
-      url: '../RealWL/RealWL?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
-    })
-  },
-  gjPos: function () {
-    var that = this;
-    var project = that.data.project;
-    wx.navigateTo({
-      url: '../GJPos/GJPos?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
-    })
-  }, 
-  changeP: function () {
-    var that = this;
-    var project = that.data.project;
-    wx.navigateTo({
-      url: '../../project/project?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
-      
-    })
-  },
-
   /**
    * 勿删
    * 时间选择器
@@ -350,7 +290,6 @@ Page({
   onReady: function () {
     // 页面渲染完成
     // 获取组件
-    this.ecComponent = this.selectComponent('#mychart-dom-bar');
   },
   onShow: function () {
     // 页面显示
@@ -362,36 +301,3 @@ Page({
     // 页面关闭
   }
 })
-
-function setOption(chart, gjList, gj) {
-  var lineA = new Array();
-  var xAx = 0.0;
-  for (var i = 0; i < gjList.length; i ++) {
-    xAx = (gjList[i].ctime).substring(11,13);
-    lineA.push([xAx, gjList[i].value]);
-  }
-  console.log(lineA)
-  const option = {
-    xAxis: {
-      type: "value",
-      maxInterval: 1
-    },
-    yAxis: {
-      splitLine: { show: false },
-      min: gj.base_Height,
-      max: gj.top_Height
-    },
-    animationDurationUpdate: 1200,
-    series: [{
-      type: 'line',
-      lineStyle: { color: "#000000" },
-      itemStyle: { color: "#000000" },
-      symbol: 'circle',
-      label: {
-        show: true,
-      },
-      data: lineA
-    }]
-  }
-  chart.setOption(option);
-}

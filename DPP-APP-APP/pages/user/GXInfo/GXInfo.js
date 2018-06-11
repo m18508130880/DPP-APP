@@ -34,7 +34,8 @@ Page({
     })
     token = str.token;
     wx.request({
-      url: 'http://118.31.78.234/dpp-app/GX_Info.do',
+      url: 'https://www.cjsci-tech.com/dpp-app/GX_Info.do',
+      //url: 'http://118.31.78.234/dpp-app/GX_Info.do',
       data: {
         Cmd: "0",
         Project_Id: project_Id,

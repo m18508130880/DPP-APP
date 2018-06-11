@@ -21,7 +21,8 @@ Page({
     var that = this;
     token = str.token;
     wx.request({
-      url: 'http://118.31.78.234/dpp-app/Manage_Role.do',
+      url: 'https://www.cjsci-tech.com/dpp-app/Manage_Role.do',
+      //url: 'http://118.31.78.234/dpp-app/Manage_Role.do',
       data: {
         Cmd: "0",
         Id: str.uId,

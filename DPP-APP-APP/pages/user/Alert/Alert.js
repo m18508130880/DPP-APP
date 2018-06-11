@@ -31,7 +31,8 @@ Page({
     token = str.token;
     console.log(token)
     wx.request({
-      url: 'http://118.31.78.234/dpp-app/Alert_Info.do',
+      url: 'https://www.cjsci-tech.com/dpp-app/Alert_Info.do',
+      //url: 'http://118.31.78.234/dpp-app/Alert_Info.do',
       data: {
         Cmd: "0",
         Token: token,

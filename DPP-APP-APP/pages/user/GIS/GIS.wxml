@@ -1,19 +1,59 @@
 <view class='page'>
-   <map id="map" class="bg_map" longitude="{{project.lng}}" latitude="{{project.lat}}" markers="{{markers}}" polyline="{{polyline}}" bindmarkertap="markertap" scale="17">
+   <map id="map" class="bg_map" longitude="{{center.lng}}" latitude="{{center.lat}}" markers="{{markers}}" polyline="{{polyline}}" scale="{{scale}}" show-location="true">
+    
   </map>
-    <!-- 底部功能模块按钮 -->
+  <block wx:if="{{alert.length>0}}">
+    <cover-view bindtap="alert" class="map_alert">
+      <cover-view class="animate">
+        <block wx:for="{{alert}}" wx:for-index="i" wx:key="">
+          <cover-view class="alert">
+            [{{alert[i].gJ_Id}}]{{alert[i].des}}
+          </cover-view>
+        </block>
+        <block wx:for="{{alert}}" wx:for-index="i" wx:key="">
+          <cover-view class="alert">
+            [{{alert[i].gJ_Id}}]{{alert[i].des}}
+          </cover-view>
+        </block>
+      </cover-view>
+      <cover-view class="flash">
+        {{alert.length}}条
+      </cover-view>
+    </cover-view>
+  </block>
+  <!--定位-->
+  <cover-image bindtap="positioning" class="location_image" src="../../../image/location.gif"></cover-image>
+  <!--回到项目-->
+  <cover-image bindtap="project" class="project_image" src="../../../image/project.gif"></cover-image>
+  <!--放大-->
+  <cover-image bindtap="zoom" id="big" class="big_image" src="../../../image/big.gif"></cover-image>
+  <!--缩小-->
+  <cover-image bindtap="zoom" id="small" class="small_image" src="../../../image/small.gif"></cover-image>
+  <!--工具-->
+  <cover-image class="tool_image" src="../../../image/tool.gif"></cover-image>
+  <!--数据采集-内部使用-->
+  <cover-image class="data_image" src="../../../image/data_collect.gif"></cover-image>
+
+  <!--底部-->
+  <cover-view class="map_bottom">
+    统     计
+  </cover-view>
+</view>
+
+
+<!--   
   <view class='bottom_button'>
     <button plain="true" bindtap="changeF" style="background-color:{{select?'#87CEEBDD':''}}">功能</button>
   </view>
-  <!-- 选择功能模块 -->
-  <scroll-view class='button_f' style="display:{{select?'none':''}}" scrool-y="true">
+  <view class='button_f' style="display:{{select?'none':''}}" scrool-y="true">
     <view class="scroll_f" bindtap="gjInfo">管井列表</view>
     <view class="scroll_f" bindtap="gxInfo">管线列表</view>
     <view class="scroll_f" bindtap="alert">告警列表</view>
     <view class="scroll_f" bindtap="gjPos">管井定位</view>
     <view class="scroll_f" bindtap="changeP">选择项目</view>
-  </scroll-view>
-<view class="graphCut-main" style="display:{{graphCut}}">
+  </view>
+
+  <view class="graphCut-main" style="display:{{graphCut}}">
     <view class="graphCut">
       <view style="text-align: center;"></view>
       <scroll-view scroll-x="true" class="graph-bg">
@@ -21,9 +61,6 @@
           
       </scroll-view>
     </view>
-    <image src='../../../image/no.gif' class="graphCut-no" bindtap="graphCutNo"></image>
-  </view>
-
-</view>
-
+    <cover-image src='../../../image/no.gif' class="graphCut-no" bindtap="graphCutNo"></cover-image>
+  </view>  -->
 

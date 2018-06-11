@@ -35,7 +35,8 @@ Page({
     })
     token = str.token;
     wx.request({
-      url: 'http://118.31.78.234/dpp-app/RealWL.do',
+      url: 'https://www.cjsci-tech.com/dpp-app/RealWL.do',
+      //url: 'http://118.31.78.234/dpp-app/RealWL.do',
       data: {
         Cmd: "1",
         Token: token,
