@@ -1,0 +1,27 @@
+<view class="page">
+  <view bindtap="onFinish" class="onFinish">未完成</view>
+  <view bindtap="finish" class="finish">已完成</view>
+  <scroll-view scroll-y="true" class="table">
+    <view class="tr-h">
+        <view class="th" style="width:20%">编号</view>
+        <view class="th" style="width:20%">下发</view>
+        <view class="th" style="width:40%">期限</view>
+        <view class="th" style="width:20%">状态</view>
+    </view>
+    <block wx:for="{{checkTask}}" wx:for-index="i" wx:key="">
+        <view id="{{checkTask[i].sN}}" bindtap="goCheckTask" class="tr-h bg-g" wx:if="{{i % 2 == 0}}">
+            <view class="td" style="width:20%">{{i+1}}</view>
+            <view class="td" style="width:20%">{{checkTask[i].leader}}</view>
+            <view class="td" style="width:40%">{{checkTask[i].end_Time}}</view>
+            <view class="td" style="width:20%">{{(checkTask[i].status == "0")?"未完成":"已完成"}}</view>
+        </view>
+        <view id="{{checkTask[i].sN}}" bindtap="goCheckTask" class="tr-h" wx:else>
+            <view class="td" style="width:20%">{{i+1}}</view>
+            <view class="td" style="width:20%">{{checkTask[i].leader}}</view>
+            <view class="td" style="width:40%">{{checkTask[i].end_Time}}</view>
+            <view class="td" style="width:20%">{{(checkTask[i].status == "0")?"未完成":"已完成"}}</view>
+        </view>
+    </block>
+  </scroll-view>
+
+</view>

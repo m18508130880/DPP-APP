@@ -1,12 +1,18 @@
 <view class='page'>
-  <map id="map" class="bg_map" longitude="{{center.longitude}}" latitude="{{center.latitude}}" markers="{{center}}" scale="17">
-  </map>
-  <scroll-view class='bg_project' scroll-y='true'>
-      <block wx:for="{{dataAll}}" wx:for-index="i">
-          <view id="{{dataAll[i].id}}" class="scroll_project {{project.id==dataAll[i].id?ok:''}}" bindtap="changeMap" >{{dataAll[i].cName}}</view>
-      </block>
+  <scroll-view class='table' scroll-y='true'>
+    <block wx:for="{{projects}}" wx:for-index="i">
+      <view id="{{projects[i].id}}" class="tr" bindtap="gotoMap" >
+        <view id="{{projects[i].id}}">
+          <image id="{{projects[i].id}}" class="img"  src="../../image/{{projects[i].id}}.png"></image>
+        </view>
+        <view id="{{projects[i].id}}" class="td">
+          <text id="{{projects[i].id}}" style="height:200rpx;">
+            {{projects[i].cName}}
+            监测设备:{{projects[i].demo[2]}}个
+            管井:{{projects[i].demo[0]}}管线:{{projects[i].demo[1]}}
+          </text>
+        </view>
+      </view>
+    </block>
   </scroll-view>
-  <view class='bg_button'>
-    <button id='{{project.id}}' class='{{ok}}' bindtap="gotoMap">进入管理</button>
-  </view>
 </view>

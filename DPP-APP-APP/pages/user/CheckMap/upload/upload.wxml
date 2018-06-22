@@ -1,0 +1,91 @@
+<!--数据上传-->
+<view style='display:{{select?"":"none"}}'>
+  <view class="upload_top">管井问题反馈</view>
+  <text bindtap="gotoGX" class="gotoGX">管线 》</text>
+  <view class="table">
+    <view class="tr_1" scroll-x="true">
+      <view class="td_11">管井编号</view>
+      <view class="td_12">
+        <picker bindchange="bindGJ" range="{{gjArray}}">
+          {{gjArray[gjIndex]}}
+        </picker>
+      </view>
+    </view>
+    <view class="tr_1" scroll-x="true">
+      <view class="td_11">问题类型</view>
+      <view class="td_12">
+        <picker bindchange="bindGJS" range="{{gjStatus}}">
+          {{gjStatus[gjS]}}
+        </picker>
+      </view>
+    </view>
+    <view class="tr_2">
+      <view class="td_21">
+        <image bindtap="camera" class="camera" src="../../../../image/camera.gif"></image>
+      </view>
+      <view class="td_22">
+        <block wx:for="{{images}}" wx:for-index="i" wx:key="">
+          <image bindtap="" class="image" src="https://www.cjsci-tech.com/dpp-app/files/images/{{images[i]}}?new Date()"></image>
+        </block>
+      </view>
+    </view>
+    <view class="tr_3">
+      <view class="td_31">描述</view>
+      <view class="td_32">
+        <textarea bindinput="des" maxlength="200" placeholder="问题描述" style="width:100%;height:10rem;" />
+      </view>
+    </view>
+    <view style="text-align:right">
+      {{des.length}}/200
+    </view>
+    
+    <view bindtap="submitGJ" class="submit">
+      提交
+    </view>
+  </view>
+</view>
+<view style='display:{{select?"none":""}}'>
+  <view class="upload_top">管线问题反馈</view>
+  <text bindtap="gotoGX" class="gotoGJ">《 管井</text>
+  <view class="table">
+    <view class="tr_1" scroll-x="true">
+      <view class="td_11">选择管线编号</view>
+      <view class="td_12">
+        <picker bindchange="bindGX" range="{{gxArray}}">
+          {{gxArray[gxIndex]}}
+        </picker>
+      </view>
+    </view>
+    <view class="tr_1" scroll-x="true">
+      <view class="td_11">问题类型</view>
+      <view class="td_12">
+        <picker bindchange="bindGXS" range="{{gxStatus}}">
+          {{gxStatus[gxS]}}
+        </picker>
+      </view>
+    </view>
+    <view class="tr_2">
+      <view class="td_21">
+        <image bindtap="camera" class="camera" src="../../../../image/camera.gif"></image>
+      </view>
+      <view class="td_22">
+        <block wx:for="{{images}}" wx:for-index="i" wx:key="">
+          <image bindtap="" class="image" src="{{images[i].url}}?new Date()"></image>
+        </block>
+      </view>
+    </view>
+    <view class="tr_3">
+      <view class="td_31">描述</view>
+      <view class="td_32">
+        <textarea bindinput="des" maxlength="200" placeholder="问题描述" style="width:100%;height:10rem;" />
+      </view>
+    </view>
+    <view style="text-align:right">
+      {{des.length}}/200
+    </view>
+    
+    <view bindtap="submitGX" class="submit">
+      提交
+    </view>
+  </view>
+</view>

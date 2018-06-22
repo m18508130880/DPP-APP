@@ -69,7 +69,10 @@ Page({
               id: gjList[i].id,
               latitude: gjList[i].wX_Lat,
               longitude: gjList[i].wX_Lng,
-              iconPath: color
+              iconPath: color,
+              width:6,
+              height:6,
+              anchor: {x:0.5, y:0.5}
             })
             var gjObj = new Object();
             gjObj.tId = gjList[i].id;
@@ -271,6 +274,20 @@ Page({
     var project = that.data.project;
     wx.navigateTo({
       url: '../Alert/Alert?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+    })
+  },
+  checkTask: function () {
+    var that = this;
+    var project = that.data.project;
+    wx.navigateTo({
+      url: '../CheckTask/CheckTask?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+    })
+  },
+  tool: function () {
+    var that = this;
+    var project = that.data.project;
+    wx.navigateTo({
+      url: '../Tool/Tool?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
     })
   },
   /**

@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +39,7 @@ public class UserRoleBean extends RmiBean {
 
 	public void ExecCmd(HttpServletRequest request,
 			HttpServletResponse response, Rmi pRmi, boolean pFromZone,
-			String Url, HashMap<String, Date> TokenList)
+			String Url, HashMap<String, String> TokenList)
 					throws ServletException, IOException {
 		PrintWriter output = null;
 		try {
@@ -49,8 +48,7 @@ public class UserRoleBean extends RmiBean {
 			json.setUrl(Url);
 			json.setRst(CommUtil.IntToStringLeftFillZero(
 					MsgBean.STA_FAILED, 4));
-			if (TokenList.containsKey(Token)) {
-				TokenList.put(Token, new Date());
+			if (TokenList.containsValue(Token)) {
 				switch (Cmd) {
 				case 0:
 					// 获取管理权限
@@ -80,6 +78,7 @@ public class UserRoleBean extends RmiBean {
 								projectJson.setCName(RealJson.getCName());
 								projectJson.setMapLev(RealJson.getMapLev());
 								projectJson.setMapAngle(RealJson.getMapAngle());
+								projectJson.setDemo(RealJson.getDemo());
 								CData.add(projectJson);
 							}
 						}

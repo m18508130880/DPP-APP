@@ -45,6 +45,10 @@ public abstract class RmiBean implements Serializable
 	public static final int	RMI_DEVMAP					= 37;
 	public static final int	RMI_TOPOGJ					= 38;
 	public static final int	RMI_TOPOGX					= 39;
+
+	public static final int	RMI_CHECK_TASK				= 40;
+	public static final int	RMI_CHECK_GJ				= 41;
+	public static final int	RMI_CHECK_GX				= 42;
 	
 	public MsgBean    msgBean = null;
 	public String     className;

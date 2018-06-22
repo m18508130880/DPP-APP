@@ -2,22 +2,63 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 25vh;
 }
-
-.userinfo-avatar {
-  width: 158rpx;
-  height: 158rpx;
-  margin: 30rpx;
-  border-radius: 100%;
+.logo {
+  position: absolute;
+  width: 200rpx;
+  height: 200rpx;
+  top: 10%;
 }
-
-.userinfo-nickname {
-  color: silver;
+.title {
+  position: absolute;
+  top: 30%;
+  color: white;
+  font-size: 40rpx;
 }
-
+.userName {
+  position: absolute;
+  width:450rpx;
+  height: 80rpx;
+  top: 45%;
+  border: 3rpx solid #339999;
+}
+.password {
+  position: absolute;
+  width:450rpx;
+  height: 80rpx;
+  top: 55%;
+  border: 3rpx solid #339999;
+}
+.icon {
+  width:80rpx;
+  height:80rpx;
+}
+.userText {
+  width:350rpx;
+  height:80rpx;
+  top: 0%;
+  color: white;
+  left: 100rpx;
+  position: absolute;
+}
+.pwdText {
+  width:350rpx;
+  height:80rpx;
+  top: 0%;
+  left: 100rpx;
+  color: white;
+  position: absolute;
+}
+.phcolor {
+  color: white;
+}
 .login {
-  width: 133px;
-  height: 40px;
-  margin-top: 10vh;
+  width:450rpx;
+  height:70rpx;
+  position: absolute;
+  top: 65%;
+  padding-top: 10rpx;
+  text-align: center;
+  color: white;
+  border: 3rpx #FFFFFF solid;
 }

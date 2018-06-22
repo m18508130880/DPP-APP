@@ -10,7 +10,9 @@ function writeStatus(status, icon){
 }
 Page({
   data: {
-    userInfo: {}
+    userInfo: {},
+    userName: "",
+    password: ""
   },
   // 初始化
   onLoad: function () {
@@ -25,17 +27,41 @@ Page({
       })
     })
   },
+  userName: function (e) {
+    this.setData({
+      userName: e.detail.value
+    })
+  },
+  password: function (e) {
+    this.setData({
+      password: e.detail.value
+    })
+  },
   // 登录处理函数
   Login: function() {
     var that = this;
     var status = "";
     var icon = "";
+    var userName = that.data.userName;
+    var password = that.data.password;
+    if (userName.length <= 0){
+      status = "请输入用户名";
+      icon = "loading";
+      writeStatus(status, icon);
+      return;
+    }
+    if (password.length <= 0) {
+      status = "请输入密码";
+      icon = "loading";
+      writeStatus(status, icon);
+      return;
+    }
     wx.request({
       url:'https://www.cjsci-tech.com/dpp-app/Login.do',
       //url: 'http://118.31.78.234/dpp-app/Login.do',
       data: {
-        Id: "cj",
-        StrMd5: md5.hex_md5("cj111111"),
+        Id: userName,
+        StrMd5: md5.hex_md5(userName + password),
         newDate: new Date()
       },
       header: { 'Content-Type': 'application/x-www-form-urlencoded'},

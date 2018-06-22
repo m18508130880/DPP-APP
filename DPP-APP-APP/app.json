@@ -3,6 +3,10 @@
     "pages/index/index",
     "pages/project/project",
     "pages/user/GIS/GIS",
+    "pages/user/Tool/Tool",
+    "pages/user/CheckTask/CheckTask",
+    "pages/user/CheckMap/CheckMap",
+    "pages/user/CheckMap/upload/upload",
     "pages/user/GJInfo/GJInfo",
     "pages/user/GXInfo/GXInfo",
     "pages/user/Alert/Alert",
@@ -14,7 +18,7 @@
   "window":{
     "backgroundTextStyle":"dark",
     "navigationBarBackgroundColor": "#268dcd",
-    "navigationBarTitleText": "城基管道科技",
+    "navigationBarTitleText": "城基智能排水管网",
     "navigationBarTextStyle":"white",
     "enablePullDownRefresh": false
   },

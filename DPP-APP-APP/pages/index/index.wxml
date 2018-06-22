@@ -1,8 +1,19 @@
 <view class="page">
   <view class="userinfo">
-    <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
-    <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    <button bindtap="Login" class="login">登录</button>
+    <image class="logo" src="../../image/logo.png"></image>
+    <view class="title">城基智能排水管网</view>
+    <view class="userName">
+      <image class="icon" src="../../image/user.gif"></image>
+      <input bindinput="userName" type="text" placeholder-class="phcolor" class="userText" maxlength="20" placeholder="输入账号"></input>
+    </view>
+    <view class="password">
+      <image class="icon" src="../../image/pwd.gif"></image>
+      <input bindinput="password" type="password" placeholder-class="phcolor" class="pwdText" maxlength="6" placeholder="输入密码"></input>
+    </view>
+    
+    <view bindtap="Login" class="login">
+      登   陆
+    </view>
     <!-- 有属性
     <text>avatarUrl:{{userInfo.avatarUrl}}</text>
     <text>nickName:{{userInfo.nickName}}</text>

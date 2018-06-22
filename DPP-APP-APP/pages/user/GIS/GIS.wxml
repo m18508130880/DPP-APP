@@ -30,14 +30,14 @@
   <!--缩小-->
   <cover-image bindtap="zoom" id="small" class="small_image" src="../../../image/small.gif"></cover-image>
   <!--工具-->
-  <cover-image class="tool_image" src="../../../image/tool.gif"></cover-image>
+  <cover-image bindtap="tool" class="tool_image" src="../../../image/tool.gif"></cover-image>
   <!--数据采集-内部使用-->
-  <cover-image class="data_image" src="../../../image/data_collect.gif"></cover-image>
+  <cover-image bindtap="checkTask" class="data_image" src="../../../image/data_collect.gif"></cover-image>
 
   <!--底部-->
-  <cover-view class="map_bottom">
-    统     计
-  </cover-view>
+  <!-- <cover-view class="map_bottom">
+    <cover-view class="bottom">统计</cover-view>
+  </cover-view> -->
 </view>
 
 

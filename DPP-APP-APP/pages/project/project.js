@@ -1,7 +1,5 @@
 var app = getApp()
 var token = "";
-var iconPath = "../../image/marke.gif";
-var dataAll;
 function writeStatus(status, icon) {
   // 弹出提示框
   wx.showToast({
@@ -12,12 +10,11 @@ function writeStatus(status, icon) {
 Page({
   data: {
     center: [],
-    dataAll: [],
+    projects: [],
     project: [],
     ok: ""
   },
   onLoad: function (str) {
-    dataAll = [];
     var that = this;
     token = str.token;
     wx.request({
@@ -32,20 +29,22 @@ Page({
       success: function (res) {
         console.log(res.data)
         if (res.data.rst == "0000") {
-          var dataObj = res.data.cData; 
+          var dataObj = res.data.cData;
+          var projects = new Array();
           for (var i = 0; i < dataObj.length; i++) {
+            var _demo = dataObj[i].demo;
             var project = {
               uId: str.uId,
               id: dataObj[i].id,
               cName: dataObj[i].cName,
               lat: dataObj[i].wX_Lat,
-              lng: dataObj[i].wX_Lng
+              lng: dataObj[i].wX_Lng,
+              demo: _demo.split(",")
             }
-            dataAll.push(project);
+            projects.push(project);
           }
-          console.log(dataAll)
           that.setData({
-            dataAll: dataAll
+            projects: projects
           })
         }
         else if (res.data.rst == "1005") {
@@ -61,49 +60,21 @@ Page({
       },
       complete: function () {
       }
-    }),
-    wx.getLocation({ //获取当前位置
-      success: function (res) {
-        that.setData({
-          center:{
-            latitude: res.latitude,
-            longitude: res.longitude
-          }
-        })
-      },
     })
-  },
-  changeMap: function (e) {
-    var that = this;
-    var id = e.target.id;
-    var project = null;
-    var center = null;
-    var dataAll = that.data.dataAll;
-    for(var i = 0; i < dataAll.length; i ++){
-      if (id == dataAll[i].id){
-        project = dataAll[i];
-        center = {
-          latitude: dataAll[i].lat,
-          longitude: dataAll[i].lng
-        }
-      }
-    }
-    if (project != null && center != null){
-      that.setData({
-        project: project,
-        center: center,
-        ok: "color_cornflowerblue"
-      })
-    }
-    console.log(that.data.center);
   },
   gotoMap: function (e) {
     var that = this;
-    var project = that.data.project;
-    if ((that.data.ok).length > 0){
-      wx.navigateTo({
-        url: '../user/GIS/GIS?token=' + token + '&uId=' + project.uId + '&project_id=' + project.id + '&lat=' + project.lat + '&lng=' + project.lng
-      })
+    var project;
+    var pId = e.target.id;
+    var projects = that.data.projects;
+    for (var i = 0; i < projects.length; i ++) {
+      if (projects[i].id == pId){
+        project = projects[i];
+        break;
+      }
     }
+    wx.navigateTo({
+      url: '../user/GIS/GIS?token=' + token + '&uId=' + project.uId + '&project_id=' + project.id + '&lat=' + project.lat + '&lng=' + project.lng
+    })
   }
 })

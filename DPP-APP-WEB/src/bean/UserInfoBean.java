@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +48,7 @@ public class UserInfoBean extends RmiBean
 	 * @param response
 	 * @param pRmi
 	 */
-	public void Login(HttpServletRequest request, HttpServletResponse response, Rmi pRmi, String Url, HashMap<String , Date> TokenList)
+	public void Login(HttpServletRequest request, HttpServletResponse response, Rmi pRmi, String Url, HashMap<String , String> TokenList)
 	{
 		PrintWriter output = null;
 		try
@@ -67,7 +66,7 @@ public class UserInfoBean extends RmiBean
 				//身份令牌
 				String _Token = (CommUtil.BytesToHexString(new util.Md5().encrypt((CommUtil.SessionId()+"CHENGJI").getBytes()), 16)).toUpperCase();
 				json.setToken(_Token);
-				TokenList.put(_Token, new Date());
+				TokenList.put(Id, _Token);
 				//用户信息
 				msgBean = pRmi.RmiExec(0, this, 0, 25);
 				UserInfoBean RealJson = (UserInfoBean)((ArrayList<?>)msgBean.getMsg()).get(0);

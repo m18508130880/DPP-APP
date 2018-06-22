@@ -94,24 +94,20 @@
 
 .map_bottom{
   width: 100%;
-	height: 105rpx;
-	overflow: hidden;
-	margin: auto;
+	height: 130rpx;
 	position: absolute;
   bottom: 0%;
+  background-color: #268dcd;
+}
+.bottom {
+  width: 100%;
   text-align: center;
-  padding-top: 30rpx;
+  justify-content: center;
+  padding-top: 40rpx;
+  padding-bottom: 40rpx;
   font-size: 45rpx;
   color: white;
-  background-color: #268dcd
-}
-
-.bottom_button {
-  position: absolute;
-  width: 99%;
-  bottom: 0%;
-  height: 10%;
-  text-align: center;
+  border: 0px #FF6347 solid;
 }
 
 .button_f { 

@@ -1,0 +1,309 @@
+
+var app = getApp()
+var token = "";
+var iconWJ = "/image/map_wj_middle.gif";
+var iconYJ = "/image/map_yj_middle.gif";
+var _icon = "/image/map_middle.gif";
+var gjArray;
+var SN;
+var isOK = false;
+var d = new Date();
+var today = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+function writeStatus(status, icon) {
+  // 弹出提示框
+  wx.showToast({
+    title: status,
+    icon: icon
+  })
+}
+Page({
+  data: {
+    select: true,
+    project: [],
+    markers: [],
+    polyline: [],
+    graphCut: "none",
+    gjArray: [],
+    realWaterLev: [],
+    alert: [],
+    scale: 17,
+    center: [],
+    _SN: ""
+  },
+  onLoad: function (str) {
+    var that = this;
+    var project_Id = str.project_id;
+    SN = str.SN;
+    that.setData({
+      project: {
+        uId: str.uId,
+        project_id: project_Id,
+        lng: str.lng,
+        lat: str.lat
+      },
+      center: {
+        lng: str.lng,
+        lat: str.lat
+      },
+      _SN: SN
+    })
+    token = str.token;
+    gjArray = [];
+    wx.request({
+      url: 'https://www.cjsci-tech.com/dpp-app/Check_GJ.do',
+      //url: 'http://118.31.78.234/dpp-app/ToPo_GJ.do',
+      data: {
+        Cmd: "1",
+        Token: token,
+        CT_SN: SN
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res.data)
+        if (res.data.rst == "0000") {
+          var gjList = res.data.cData;
+          var markerArray = new Array();
+          var color = "";
+          for (var i = 0; i < gjList.length; i++) {
+            if (gjList[i].id.indexOf("WJ") > -1) {
+              color = iconWJ;
+            } else {
+              color = iconYJ;
+            }
+            if (gjList[i].status == "0"){
+              color = _icon;
+            }
+            markerArray.push({
+              id: gjList[i].id,
+              latitude: gjList[i].wX_Lat,
+              longitude: gjList[i].wX_Lng,
+              iconPath: color,
+              width: 6,
+              height: 6,
+              anchor: { x: 0.5, y: 0.5 }
+            })
+            var gjObj = new Object();
+            gjObj.tId = gjList[i].id;
+            gjObj.tLng = gjList[i].wX_Lat;
+            gjObj.tLat = gjList[i].wX_Lng;
+            gjArray.push(gjObj);
+          }
+          wx.request({
+            url: 'https://www.cjsci-tech.com/dpp-app/Check_GX.do',
+            //url: 'http://118.31.78.234/dpp-app/ToPo_GX.do',
+            data: {
+              Cmd: "1",
+              Token: token,
+              CT_SN: SN
+            },
+            method: 'GET',
+            success: function (res) {
+              console.log(res.data)
+              if (res.data.rst == "0000") {
+                var gxList = res.data.cData;
+                var polylineArray = new Array();
+                var color = ""; var a = "";
+                var count = 0;
+                for (var i = 0; i < gxList.length; i++) {
+                  var gjStartId = gxList[i].start_Id;
+                  var gjEndId = gxList[i].end_Id;
+                  var gjStart = that.gjGet(gjStartId);
+                  var gjEnd = that.gjGet(gjEndId);
+                  if (null == gjStart || null == gjEnd) { continue; }
+                  if (gxList[i].id.indexOf("WG") > -1) {
+                    color = "#FF0000DD";
+                  } else {
+                    color = "#0000FFDD";
+                  }
+                  if (gxList[i].status == "0") {
+                    color = "#666666DD"
+                  }
+                  if (gxList[i].id.indexOf("WG99") > -1 || gxList[i].id.indexOf("YG99") > -1) { continue; }
+                  polylineArray[count] = {
+                    points: [{
+                      latitude: Number(gjStart.tLng),
+                      longitude: Number(gjStart.tLat)
+                    }, {
+                      latitude: Number(gjEnd.tLng),
+                      longitude: Number(gjEnd.tLat)
+                    }],
+                    color: color,
+                    width: 2,
+                    id: gxList[i].id
+                  }
+                  count++;
+                }
+                //console.log(a)
+                console.log(polylineArray)
+                that.setData({
+                  polyline: polylineArray
+                })
+              }
+              else if (res.data.rst == "1005") {
+                wx.reLaunch({
+                  url: '../../index/index'
+                })
+                writeStatus("操作超时", "loading");
+              }
+            },
+            fail: function (res) {
+              console.log("fail")
+              console.log(res)
+            },
+            complete: function () {
+            }
+          })
+          that.setData({
+            markers: markerArray
+          })
+          console.log(that.data)
+        }
+        else if (res.data.rst == "1005") {
+          wx.reLaunch({
+            url: '../../index/index'
+          })
+          writeStatus("操作超时", "loading");
+        }
+      },
+      fail: function (res) {
+        console.log("fail")
+        console.log(res)
+      },
+      complete: function () {
+      }
+    })
+  },
+  gjGet: function (objValue) {
+    var that = this;
+    //console.log(gjArray)
+    for (var i = 0; i < gjArray.length; i++) {
+      if ((gjArray[i].tId) == objValue) {
+        return gjArray[i];
+      }
+    }
+  },
+  //点击缩放按钮 
+  zoom: function (e) {
+    var that = this;
+    var scale = that.data.scale;
+    if (e.target.id === "small") {
+      --scale;
+    } else {
+      ++scale;
+    }
+    if (scale > 20 || scale < 6) { return }
+    that.setData({
+      scale: scale
+    })
+  },
+  // 定位自己位置
+  positioning(e) {
+    var that = this;
+    wx.getLocation({
+      type: 'gcj02', //返回可以用于wx.openLocation的经纬度  
+      success: function (res) {
+        var latitude = res.latitude
+        var longitude = res.longitude
+        that.setData({
+          center: {
+            lng: longitude,//经度   
+            lat: latitude,//纬度   
+          }
+        })
+      }
+    })
+  },
+  // 回到项目中心
+  project: function () {
+    var that = this;
+    that.setData({
+      center: {
+        lng: that.data.project.lng,//经度   
+        lat: that.data.project.lat,//纬度   
+      }
+    })
+  },
+  checkTask: function () {
+    var that = this;
+    var project = that.data.project;
+    wx.navigateTo({
+      url: '../CheckTask/CheckTask?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng
+    })
+  },
+  info: function () {
+    var that = this;
+    that.setData({
+      select: !that.data.select
+    })
+    console.log(that.data.select)
+  },
+  upload: function () {
+    var that = this;
+    var project = that.data.project;
+    
+    var _SN = that.data._SN;
+    wx.navigateTo({
+      url: 'upload/upload?token=' + token + '&uId=' + project.uId + '&project_id=' + project.project_id + '&lat=' + project.lat + '&lng=' + project.lng + '&SN=' + _SN
+    })
+  },
+  submit: function () {
+    var that = this;
+    wx.getLocation({
+      type: 'gcj02', //返回可以用于wx.openLocation的经纬度  
+      success: function (res) {
+        var latitude = res.latitude
+        var longitude = res.longitude
+        var markers = that.data.markers;
+        var lat = 0;
+        var lng = 0;
+        var _lat = 0;
+        var _lng = 0;
+        for (var i = 0; i < markers.length; i++) {
+          lat = Math.abs(markers[i].latitude - latitude)
+          lng = Math.abs(markers[i].longitude - longitude)
+          for (var j = 0; j < markers.length - 1; j++) {
+            _lat = Math.abs(markers[j].latitude - latitude)
+            _lng = Math.abs(markers[j].longitude - longitude)
+            if (_lat * _lng > lat * lng) {
+              var temp = markers[i];
+              markers[i] = markers[j];
+              markers[j] = temp;
+              lat = _lat;
+              lng = _lng;
+            }
+          }
+        }
+        
+        console.log(markers)
+      }
+    });
+  },
+  
+  /**
+   * 勿删
+   * 时间选择器
+   */
+  BDateChange: function (e) { //时间选择器
+    this.setData({
+      BDate: e.detail.value
+    })
+  },
+  EDateChange: function (e) { //时间选择器
+    this.setData({
+      EDate: e.detail.value
+    })
+  },
+  onReady: function () {
+    // 页面渲染完成
+    // 获取组件
+  },
+  onShow: function () {
+    // 页面显示
+  },
+  onHide: function () {
+    // 页面隐藏
+  },
+  onUnload: function () {
+    // 页面关闭
+  }
+})

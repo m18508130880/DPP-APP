@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +34,7 @@ public class TopoGJBean extends RmiBean {
 
 	public void ExecCmd(HttpServletRequest request, HttpServletResponse response,
 			Rmi pRmi, boolean pFromZone, String Url,
-			HashMap<String, Date> TokenList) throws ServletException,
+			HashMap<String, String> TokenList) throws ServletException,
 			IOException {
 		PrintWriter output = null;
 		try {
@@ -45,8 +44,7 @@ public class TopoGJBean extends RmiBean {
 			json.setUrl(Url);
 			json.setRst(CommUtil.IntToStringLeftFillZero(
 					MsgBean.STA_FAILED, 4));
-			if (TokenList.containsKey(Token)) {
-				TokenList.put(Token, new Date());
+			if (TokenList.containsValue(Token)) {
 				List<Object> CData = new ArrayList<Object>();
 				msgBean = pRmi.RmiExec(Cmd, this, 0, 25);
 				switch (Cmd) {
