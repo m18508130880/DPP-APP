@@ -1,91 +1,94 @@
-var app = getApp()
-var md5 = require("../../libs/md5.js");
-//md5.hex_md5("");
+var app = getApp();
+var imgPath = app.config.imgPath;
+var template = require('../../utils/customTabBar/customTabBar.js');
 function writeStatus(status, icon){ 
   // 弹出提示框
     wx.showToast({
       title: status,
       icon: icon
     })
-}
+};
 Page({
   data: {
-    userInfo: {},
-    userName: "",
-    password: ""
+    topImgUrl: [
+        imgPath+'top_1.png',
+        imgPath +'top_2.png'
+      ],
+    news: [],
+    use: []
   },
   // 初始化
   onLoad: function () {
-    wx.clearStorage();
-    wx.clearStorageSync();
-    var that = this
-    //调用应用实例的方法获取全局数据
-    app.getUserInfo(function(userInfo){
-      //更新数据
-      that.setData({
-        userInfo:userInfo
-      })
-    })
+    template.tabbar("tabBar", 0, this)//0表示第一个tabbar
+    app.Login();
+    var userInfo = wx.getStorageSync('userInfo');
+    this.getNewsList();
+    this.getUseList();
   },
-  userName: function (e) {
-    this.setData({
-      userName: e.detail.value
-    })
+  // 生命周期监听
+  onShow: function () {
+    this.getNewsList();
+    this.getUseList();
   },
-  password: function (e) {
-    this.setData({
-      password: e.detail.value
-    })
-  },
-  // 登录处理函数
-  Login: function() {
+  // 获取新闻信息
+  getNewsList: function () {
     var that = this;
-    var status = "";
-    var icon = "";
-    var userName = that.data.userName;
-    var password = that.data.password;
-    if (userName.length <= 0){
-      status = "请输入用户名";
-      icon = "loading";
-      writeStatus(status, icon);
-      return;
-    }
-    if (password.length <= 0) {
-      status = "请输入密码";
-      icon = "loading";
-      writeStatus(status, icon);
-      return;
-    }
     wx.request({
-      url:'https://www.cjsci-tech.com/dpp-app/Login.do',
+      url: 'https://www.cjscitech.cn/dpp-app/getNewsList.do',
       //url: 'http://118.31.78.234/dpp-app/Login.do',
       data: {
-        Id: userName,
-        StrMd5: md5.hex_md5(userName + password),
+        Cmd: 0,
         newDate: new Date()
       },
-      header: { 'Content-Type': 'application/x-www-form-urlencoded'},
+      header: { 'Content-Type': 'application/x-www-form-urlencoded' },
       method: 'POST',
-      success: function(res){
-        console.log(res.data)
-        if(res.data.rst == "0000") {
-          status = "成功";
-          icon = "success";
-          wx.navigateTo({
-            //url: '../user/pieChart/pieChart'
-            url: '../project/project?token=' + res.data.token + '&uId=' + res.data.manage_Role
+      success: function (res) {
+        if (res.data.rst == "0000") {
+          var obj = res.data.cData;
+          that.setData({
+            news: obj
           })
         }
-      }, 
-      fail: function(res) {
-        console.log("fail")
-        console.log(res)
-        status = "失败";
-        icon = "loading";
-      },
-      complete: function() {
-        writeStatus(status, icon);
       }
     })
+  },
+  getUseList: function () {
+    var that = this;
+    wx.request({
+      url: 'https://www.cjscitech.cn/dpp-app/getUseList.do',
+      //url: 'http://118.31.78.234/dpp-app/Login.do',
+      data: {
+        Cmd: 0,
+        newDate: new Date()
+      },
+      header: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      method: 'POST',
+      success: function (res) {
+        if (res.data.rst == "0000") {
+          var obj = res.data.cData;
+          that.setData({
+            use: obj
+          })
+        }
+      }
+    })
+  },
+  gotoNews: function (e) {
+    var sn = e.target.id;
+    console.log(sn)
+    wx.navigateTo({
+      //url: 'http://www.cjsci-tech.com/bd/shownews.php?id=31'
+      url: 'news/news?sn='+sn,
+    })
+
+  },
+  gotoUse: function (e) {
+    var sn = e.target.id;
+    console.log(sn)
+    wx.navigateTo({
+      //url: 'http://www.cjsci-tech.com/bd/shownews.php?id=31'
+      url: 'use/use?sn=' + sn,
+    })
+
   }
 })

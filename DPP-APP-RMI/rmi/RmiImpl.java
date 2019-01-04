@@ -14,6 +14,8 @@ import util.CommUtil;
 import util.DBUtil;
 import util.MsgBean;
 import bean.AlertInfoBean;
+import bean.AppNewsBean;
+import bean.AppUseBean;
 import bean.CheckTaskBean;
 import bean.CheckTaskGJBean;
 import bean.CheckTaskGXBean;
@@ -219,6 +221,12 @@ public class RmiImpl extends UnicastRemoteObject implements Rmi
 						break;
 					case RmiBean.RMI_CHECK_GX:
 						rmiBean = new CheckTaskGXBean();
+						break;
+					case RmiBean.RMI_APP_NEWS:
+						rmiBean = new AppNewsBean();
+						break;
+					case RmiBean.RMI_APP_USE:
+						rmiBean = new AppUseBean();
 						break;
 				}
 				rmiBean.getData(rs);

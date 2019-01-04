@@ -1,6 +1,0 @@
-.stage {
-    width: 500px;
-    height: 200px;
-    background:transparent;
-    border:1px red solid;
-}

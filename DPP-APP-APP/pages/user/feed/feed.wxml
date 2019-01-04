@@ -1,0 +1,17 @@
+<view class="page">
+  <view class="input_advice">
+    <textarea bindinput="input_advice" maxlength="400" placeholder="请输入遇到的问题或建议..."></textarea>
+  </view>
+  <view class="input_number">{{input_length}}</view>
+  <view class="addPhoto">
+    <image class="photo" bindtap="importPhoto" src="../../../image/addPhont.png"></image>
+    <text class="photo_demo" space="ensp" hidden="{{phont_demo}}"> 添加图片加以说明</text>
+  </view>
+  <view class="phone">
+    <text space="ensp"> 联系电话  </text>
+    <input placeholder="选填，便于我们联系你"></input>
+  </view>
+  <view class="commit" style="background:{{selected?'#00BFFF':'	#87CEFA'}}">
+    <text space="emsp">提  交</text>
+  </view>
+</view>

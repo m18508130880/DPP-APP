@@ -1,0 +1,34 @@
+.bg_content{
+  background:white;
+  width:96%;
+  height:75rpx;
+  margin-left:2%;
+  margin-top:10rpx;
+  border-radius:10rpx 10rpx 10rpx 10rpx;
+  display:flex;
+  flex-direction:row;
+  padding-top:15rpx;
+}
+.content_text{
+  font-size: 40rpx;
+  margin-left:60rpx;
+}
+.text_{
+  width:350rpx;
+  height:60rpx;
+  border-bottom:1rpx solid gray;
+  font-size: 40rpx;
+}
+.exit{
+  position:absolute;
+  bottom:10rpx;
+  width:96%;
+  height:70rpx;
+  padding-top:20rpx;
+  left:2%;
+  background:white;
+  color:gray;
+  border:1rpx solid gray;
+  border-radius:10rpx 10rpx 10rpx 10rpx;
+  text-align: center;
+}

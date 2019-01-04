@@ -1,8 +1,0 @@
-<view class="section">
-  <view class="label">预约项目</view>
-  <picker bindchange="bindCasPickerChange" value="{{casIndex1}}" range="{{casArray}}">
-    <view>
-      <text style="background-color:red">{{casArray[casIndex]}}</text>
-    </view>
-  </picker>
-</view>

@@ -1,0 +1,31 @@
+.content{
+  width: 94%;
+  margin-left: 2%;
+  background: white;
+  border-radius:10rpx 10rpx 10rpx 10rpx;
+}
+.content_top{
+  width: 96%;
+  margin-left: 2%;
+  background: white;
+  border-radius:10rpx 10rpx 0rpx 0rpx;
+  border-bottom: 1rpx gray dotted;
+  justify-content: center;
+  text-align:center;
+  margin-top: 20rpx;
+  padding-bottom: 20rpx;
+  margin-bottom: 20rpx;
+  font-size:40rpx;
+  font-weight: bold;
+}
+.content_title{
+  width: 96%;
+  margin-left: 2%;
+  font-size: 35rpx;
+  font-weight: bold;
+}
+.content_text{
+  width: 96%;
+  margin-left: 2%;
+  font-size: 35rpx;
+}

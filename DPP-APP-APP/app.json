@@ -1,27 +1,33 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/project/project",
-    "pages/user/GIS/GIS",
-    "pages/user/Tool/Tool",
-    "pages/user/CheckTask/CheckTask",
-    "pages/user/CheckMap/CheckMap",
-    "pages/user/CheckMap/upload/upload",
-    "pages/user/GJInfo/GJInfo",
-    "pages/user/GXInfo/GXInfo",
-    "pages/user/Alert/Alert",
-    "pages/user/GJPos/GJPos",
-    "pages/user/RealWL/RealWL",
-    "pages/user/pieChart/pieChart",
-    "pages/user/picker/picker"
+    "pages/index/news/news",
+    "pages/index/use/use",
+    "pages/GIS/GIS",
+    "pages/check/check",
+    "pages/check/measure/measure",
+    "pages/check/maintain/maintain",
+    "pages/check/repair/repair",
+    "pages/check/service/service",
+    "pages/check/install/install",
+    "pages/check/debug/debug",
+    "pages/user/user",
+    "pages/user/login/login",
+    "pages/user/userInfo/userInfo",
+    "pages/user/feed/feed",
+    "pages/user/team/team",
+    "pages/user/about/about"
   ],
   "window":{
     "backgroundTextStyle":"dark",
     "navigationBarBackgroundColor": "#268dcd",
-    "navigationBarTitleText": "城基智能排水管网",
+    "navigationBarTitleText": "排水管网智能管理",
     "navigationBarTextStyle":"white",
     "enablePullDownRefresh": false
   },
- 
-  "debug": true
+  "debug": false
+  
+
 }
+
+

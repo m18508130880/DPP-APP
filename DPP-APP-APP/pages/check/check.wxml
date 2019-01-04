@@ -1,0 +1,58 @@
+<import src="../../utils/customTabBar/customTabBar.wxml"/>
+<template is="tabBar" data="{{tabBar:bindData.tabBar}}"/>
+
+<view class="page tab">
+  <!-- 测量 -->
+  <view class="bg_top">
+    <image class="top_img" src='../../image/engineer.png'></image>
+    <view class="top_text">工程</view>
+  </view>
+  <view class="bg_content">
+    <!-- 一排只能放四个 -->
+    <view class="content_function">
+      <view class="bg_function" bindtap="gotoMeasure">
+        <image class="function_img" src='../../image/measure.png'></image>
+        <view class="function_text">测量</view>
+      </view>
+      <view class="bg_function" bindtap="gotoMaintain">
+        <image class="function_img" src='../../image/maintain.png'></image>
+        <view class="function_text">巡查</view>
+      </view>
+      <view class="bg_function" bindtap="gotoRepair">
+        <image class="function_img" src='../../image/repair.png'></image>
+        <view class="function_text">报修</view>
+      </view>
+      <view class="bg_function" bindtap="gotoService">
+        <image class="function_img" src='../../image/service.png'></image>
+        <view class="function_text">维修</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 设备 -->
+  <view class="bg_top">
+    <image class="top_img" src='../../image/equip.png'></image>
+    <view class="top_text">设备</view>
+  </view>
+  <view class="bg_content">
+    <view class="content_function">
+      <view class="bg_function" bindtap="gotoInstall">
+        <image class="function_img" src='../../image/install.png'></image>
+        <view class="function_text">安装</view>
+      </view>
+      <view class="bg_function" bindtap="gotoDebug">
+        <image class="function_img" src='../../image/debug.png'></image>
+        <view class="function_text">调试</view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 巡检 -->
+  <view class="bg_top">
+    <image class="top_img" src='../../image/patrol.png'></image>
+    <view class="top_text">巡检</view>
+  </view>
+  <view class="bg_content">
+    
+  </view>
+</view>

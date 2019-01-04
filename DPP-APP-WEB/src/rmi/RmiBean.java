@@ -50,6 +50,9 @@ public abstract class RmiBean implements Serializable
 	public static final int	RMI_CHECK_GJ				= 41;
 	public static final int	RMI_CHECK_GX				= 42;
 	
+	public static final int	RMI_APP_NEWS				= 50;
+	public static final int	RMI_APP_USE					= 51;
+	
 	public MsgBean    msgBean = null;
 	public String     className;
 	public CurrStatus currStatus = null;

@@ -70,13 +70,14 @@ public class UserInfoBean extends RmiBean
 				//用户信息
 				msgBean = pRmi.RmiExec(0, this, 0, 25);
 				UserInfoBean RealJson = (UserInfoBean)((ArrayList<?>)msgBean.getMsg()).get(0);
-				
+				json.setId(RealJson.getId());
 				json.setCName(RealJson.getCName());
 				json.setDept_Id(RealJson.getDept_Id());
+				json.setBirthday(RealJson.getBirthday());
 				json.setTel(RealJson.getTel());
 				json.setFp_Role(RealJson.getFp_Role());
 				json.setManage_Role(RealJson.getManage_Role());
-				
+				json.setStatus(RealJson.getStatus());
 				json.setRst(CommUtil.IntToStringLeftFillZero(MsgBean.STA_SUCCESS, 4));
 
 				JSONObject jsonObj = (JSONObject) JSONObject.toJSON(json);

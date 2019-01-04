@@ -1,0 +1,59 @@
+.bg_top{
+  background:white;
+  width:96%;
+  height:80rpx;
+  margin-left:2%;
+  margin-top:10rpx;
+  display:flex;
+  flex-direction:row;
+  border-radius:20rpx 20rpx 0rpx 0rpx;
+}
+.top_img{
+  width:80rpx;
+  height:80rpx;
+  margin-left:30rpx;
+}
+.top_text{
+  margin-left:20rpx;
+  margin-top:18rpx;
+  color:blue;
+  font-size:40rpx;
+}
+.bg_content{
+  background:white;
+  border-radius:0rpx 0rpx 20rpx 20rpx;
+  height:300rpx;
+  width:96%;
+  margin-left:2%;
+  border-top:1rpx dotted gray;
+}
+.content_function{
+  width:100%;
+  display:flex;
+  flex-direction:row;
+}
+.bg_function{
+  height:130rpx;
+  width:130rpx;
+  margin:10rpx 0rpx 0rpx 38rpx;
+  border:2rpx solid #CCCCCC;
+  border-radius:10rpx 10rpx 10rpx 10rpx;
+  font-size: 30rpx;
+}
+.function_img{
+  width:80rpx;
+  height:80rpx;
+  margin-left:25rpx;
+}
+.function_text{
+  margin-left:35rpx;
+  color:gray;
+  font-size:30rpx;
+}
+
+/*隐藏滚动条*/
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}

@@ -1,0 +1,48 @@
+<import src="../../utils/customTabBar/customTabBar.wxml"/>
+<template is="tabBar" data="{{tabBar:bindData.tabBar}}"/>
+
+<view class="page tab">
+<!--web-view src="http://www.cjsci-tech.com/"></web-view-->
+  <!-- 登录 -->
+  <view class="bg_top">
+    <image class="top_icon" src="../../image/headPort{{userInfo.phont}}.png"></image>
+    <view bindtap="gotoLogin" class="top_text">{{userInfo.cName}}</view>
+    <image bindtap="gotoLogin" class="top_icon_right" src="../../image/arrowRight.png"></image>
+  </view>
+  <!-- 项目选择 -->
+  <view class="bg_content">
+    <image class="content_icon" src="../../image/project.png"></image>
+    <view style="width:72%;">
+      <picker bindchange="bindPickerChange" value="{{projects[index].id}}" range-key="{{'cName'}}" range="{{projects}}">
+        <view class="content_text">{{projects[index].cName}}</view>
+      </picker>
+    </view>
+    <image class="content_icon_right" src="../../image/arrowRight.png"></image>
+  </view>
+  <!-- 问题反馈 -->
+  <view class="bg_content" bindtap="gotoFeed">
+    <image class="content_icon" src="../../image/feed.png"></image>
+    <view style="width:72%">
+      <view class="content_text">问题反馈</view>
+    </view>
+    <image class="content_icon_right" src="../../image/arrowRight.png"></image>
+  </view>
+  <!-- 技术力量 -->
+  <view class="bg_content" bindtap="gotoTeam">
+    <image class="content_icon" src="../../image/team.png"></image>
+    <view style="width:72%">
+      <view class="content_text">技术力量</view>
+    </view>
+    <image class="content_icon_right" src="../../image/arrowRight.png"></image>
+  </view>
+  <!-- 关于 -->
+  <view class="bg_content" bindtap="gotoAbout">
+    <image class="content_icon" src="../../image/about.png"></image>
+    <view style="width:72%">
+      <view class="content_text">关于</view>
+    </view>
+    <image class="content_icon_right" src="../../image/arrowRight.png"></image>
+  </view>
+  <!-- 切换账号 -->
+  <view class="changeUser" bindtap="changeUser">切换账号</view>
+</view>

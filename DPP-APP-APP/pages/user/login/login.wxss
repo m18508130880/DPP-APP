@@ -1,0 +1,75 @@
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.logo {
+  font-size: 40rpx;
+  position: absolute;
+  width: 200rpx;
+  height: 200rpx;
+  top: 10%;
+}
+.title {
+  position: absolute;
+  top: 30%;
+  color: #0000FF;
+  font-size: 35rpx;
+}
+.title_1 {
+  position: absolute;
+  top: 34%;
+  color: #0000FF;
+  font-size: 25rpx;
+}
+.userName {
+  position: absolute;
+  width:450rpx;
+  height: 81rpx;
+  top: 45%;
+  display:flex;
+  flex-direction:row;
+  border: 3rpx solid #339999;
+}
+.password {
+  position: absolute;
+  width:450rpx;
+  height: 81rpx;
+  top: 55%;
+  display:flex;
+  flex-direction:row;
+  border: 3rpx solid #339999;
+}
+.icon {
+  width:80rpx;
+  height:80rpx;
+}
+.userText {
+  width:350rpx;
+  height:80rpx;
+  margin-left: 20rpx;
+  color: #0000FF;
+  font-size: 40rpx;
+}
+.pwdText {
+  width:350rpx;
+  height:80rpx;
+  margin-left: 20rpx;
+  color: #0000FF;
+  font-size: 40rpx;
+}
+.phcolor {
+  color: rgb(182, 178, 178);
+}
+.login {
+  width:450rpx;
+  height:70rpx;
+  position: absolute;
+  top: 65%;
+  padding-top: 20rpx;
+  text-align: center;
+  font-size: 38rpx;
+  color: white;
+  background: #00BFFF;
+  border: 3rpx #00BFFF solid;
+}

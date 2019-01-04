@@ -1,0 +1,53 @@
+<view class="page">
+  <view class="bg_content">
+    <view class="content_text">
+      <text space='emsp'>姓  名: </text>
+    </view>
+    <view class="text_">
+      <text space='emsp'> {{userInfo.cName}}</text>
+    </view>
+  </view>
+  <view class="bg_content">
+    <view class="content_text">
+      <text space='emsp'>账  号: </text>
+    </view>
+    <view class="text_">
+      <text space='emsp'> {{userInfo.id}}</text>
+    </view>
+  </view>
+  <view class="bg_content">
+    <view class="content_text">
+      <text space='emsp'>联系电话: </text>
+    </view>
+    <view class="text_">
+      <text space='emsp'> {{userInfo.tel}}</text>
+    </view>
+  </view>
+  <view class="bg_content">
+    <view class="content_text">
+      <text space='emsp'>入职日期: </text>
+    </view>
+    <view class="text_">
+      <text space='emsp'> {{userInfo.birthday}}</text>
+    </view>
+  </view>
+  <view class="bg_content">
+    <view class="content_text">
+      <text space='emsp'>管理权限: </text>
+    </view>
+    <view class="text_">
+      <text space='emsp'> {{userInfo.fp_Role}}</text>
+    </view>
+  </view>
+  <view class="bg_content">
+    <view class="content_text">
+      <text space='emsp'>功能权限: </text>
+    </view>
+    <view class="text_">
+      <text space='emsp'> {{userInfo.manage_Role}}</text>
+    </view>
+  </view>
+  <view class="exit" bindtap="exit">
+      <text space='ensp'>退 出 登 录</text>
+  </view>
+</view>

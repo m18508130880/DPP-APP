@@ -1,8 +1,17 @@
+@import "wxParse/wxParse.wxss";
+@import "/utils/customTabBar/customTabBar.wxss";
 .page {
   min-height: 100vh;
-  background-color:#FFFFFF;
+  background-color:rgb(221, 219, 219);
   background-size: 100% 100%;
-  background-image: url("https://www.cjsci-tech.com/dpp-app/skin/images/bg3.gif")
+  background-image: url("https://www.cjscitech.cn/dpp-app/skin/images/bd.jpg")
+}
+.tab {
+  min-height:91.5vh;
+  max-height:91.5vh;
 }
 
-  /*background-image: url("http://118.31.78.234/dpp-app/skin/images/mainbg.jpg");*/
+  /*background-image: url("http://118.31.78.234/dpp-app/skin/images/mainbg.jpg");
+  
+  background-image: url("https://www.cjscitech.cn/dpp-app/skin/images/bg3.gif")
+  background-image: url("https://www.cjsci-tech.com/dpp-app/skin/images/bg3.gif")*/

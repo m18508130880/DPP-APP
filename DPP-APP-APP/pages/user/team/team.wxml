@@ -1,0 +1,23 @@
+<view class="page">
+  <view class="content">
+  <view class="content_top">技术力量</view>
+    <text class="content_title" space="emsp"> 首席科学家：刘遂庆教授</text>
+    <text class="content_text" space="emsp">
+ * 同济大学环境科学与工程学院（原）院长，博士生导师
+ * 给排水委员会委员兼给水管网研究会理事长</text>
+    <text class="content_title" space="emsp">
+ 环境科学指导：张文辉教授</text>
+    <text class="content_text" space="emsp">
+ * 享受国务院特贴专家
+ * 国家863课题组成员</text>
+    <text class="content_title" space="emsp">
+ 信息化工程学指导：吕丽民教授</text>
+    <text class="content_text" space="emsp">
+ * 浙江工业大学计算机科学与技术学院、软件学院硕士生导师
+ * 计算机网络应用系统专家</text>
+    <text class="content_text" space="emsp">
+ 
+ 并由高级给排水工程师5人、市政专业工程师1人、计算机研究生3人、专业设备上岗人员6人等骨干力量协同设计完善。
+    </text>
+  </view>
+</view>

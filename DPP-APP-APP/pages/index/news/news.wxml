@@ -1,0 +1,16 @@
+
+<import src="../../../wxParse/wxParse.wxml"/>
+
+<view class="page" style="background:white">
+  <view style="font-size:40rpx;font-weight:bold;margin:20rpx 0rpx 20rpx 10rpx;">
+    <text space="ensp"> {{title}}</text>
+  </view>
+  <view style="border-top:1rpx solid #DCDCDC;width:94%;margin-left:3%;height:20rpx;"></view>
+  <view style="width:94%;padding-left:3%;">
+    <template is="wxParse" data="{{wxParseData:dkcontent.nodes}}"/>
+  </view>
+  <view style="border-top:1rpx solid #DCDCDC;width:94%;margin-left:3%;margin-top:30rpx;height:20rpx;"></view>
+  <view style="font-size:25rpx;height:60rpx;margin-left:450rpx;color:gray">
+    · {{date}}
+  </view>
+</view>
