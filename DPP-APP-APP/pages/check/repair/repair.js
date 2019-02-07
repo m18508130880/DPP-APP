@@ -8,154 +8,82 @@ function writeStatus(status, icon) {
 };
 Page({
   data: {
-    id: '001001',
-    deep: '1.2',
-    size: '1000',
-    inGX: [
+    items:[
       {
-        diameter: '300',
-        height: '3.52',
-        gjId: '001001'
+        name: "雨水井",
+        value: "1",
+        checked: false
+      },{
+        name: "污水井",
+        value: "2",
+        checked: false
+      }, {
+        name: "排出口",
+        value: "3",
+        checked: false
+      },{
+        name: "水质仪",
+        value: "4",
+        checked: false
+      }, {
+        name: "液位计",
+        value: "5",
+        checked: false
+      }, {
+        name: "控制箱",
+        value: "6",
+        checked: false
       }
     ],
-    outGX: {
-      diameter: '300',
-      height: '3.52',
-      gjId: '001001'
-    },
-    inPhont: [],
-    outPhont: [],
-    demo: '测试',
-
-    userInfo: {},
-    userName: "",
-    password: "",
-    multiArray: [['001', '002'], ['001', '002', '003', '004', '005', '006']],
-    multiIndex: [0, 0],
-    inGXHidden: false,
-    outGXHidden: false,
-    inHeight: 170,
-    qd: '',
-    zjd: '_',
-    zd: ''
+    que: [
+      {
+        name: "电压不足",
+        value: "1",
+        checked: false
+      }, {
+        name: "接线断开",
+        value: "2",
+        checked: false
+      }, {
+        name: "没有充电",
+        value: "3",
+        checked: false
+      }, {
+        name: "控制损坏",
+        value: "4",
+        checked: false
+      }, {
+        name: "设备故障",
+        value: "5",
+        checked: false
+      }, {
+        name: "DTU故障",
+        value: "6",
+        checked: false
+      }
+    ],
+    photo:[],
+    photoDemo: false
   },
   // 初始化
   onLoad: function () {
     var that = this;
 
   },
-  // 输入深度
-  inputDeep: function (e) {
-    var index = e.target.id;
-    var value = e.detail.value;
-    this.setData({
-      deep: value
-    })
-  },
-  // 输入井室尺寸
-  inputSize: function (e) {
-    var index = e.target.id;
-    var value = e.detail.value;
-    this.setData({
-      size: value
-    })
-  },
-  // 更改起终点
-  radioCheckedChange: function (e) {
-    var val = e.target.id;
-    var inHidden = true;
-    var outHidden = true;
-    var qd = '';
-    var zjd = '';
-    var zd = '';
-    if (val == 'qd') {
-      qd = '_';
-      inHidden = true;
-      outHidden = false;
-    } else if (val == 'zjd') {
-      zjd = '_';
-      inHidden = false;
-      outHidden = false;
-    } else if (val == 'zd') {
-      zd = '_';
-      inHidden = false;
-      outHidden = true;
-    }
-    this.setData({
-      inGXHidden: inHidden,
-      outGXHidden: outHidden,
-      qd: qd,
-      zjd: zjd,
-      zd: zd
-    })
-  },
-  // 增加入口输入框
-  addInGX: function (e) {
-    var inGX = this.data.inGX;
-    inGX.push(
-      {
-        diameter: '300',
-        height: '3.52',
-        gjId: '001001'
+  // 定位
+  position: function () {
+    wx.getLocation({
+      type: 'wgs84',
+      success(res) {
+        console.log(res)
+        const latitude = res.latitude
+        const longitude = res.longitude
+        const speed = res.speed
+        const accuracy = res.accuracy
       }
-    );
-    var inHeight = this.data.inHeight;
-    this.setData({
-      inHeight: inHeight + 80,
-      inGX: inGX
     })
   },
-  // 输入入口管径
-  inputInGJ: function (e) {
-    var index = e.target.id;
-    var value = e.detail.value;
-    var inGX = this.data.inGX;
-    inGX[index].diameter = value;
-    this.setData({
-      inGX: inGX
-    })
-  },
-  // 输入入口底部标高
-  inputInDG: function (e) {
-    var index = e.target.id;
-    var value = e.detail.value;
-    var inGX = this.data.inGX;
-    inGX[index].height = value;
-    this.setData({
-      inGX: inGX
-    })
-  },
-  // 输入入口管井编号
-  inputInRK: function (e) {
-    var index = e.target.id;
-    var value = e.detail.value;
-    var inGX = this.data.inGX;
-    inGX[index].gjId = value;
-    this.setData({
-      inGX: inGX
-    })
-  },
-  // 输入出口管径
-  inputOutGJ: function () {
-    var index = e.target.id;
-    var value = e.detail.value;
-    var outGX = this.data.outGX;
-    outGX[index].diameter = value;
-    this.setData({
-      outGX: outGX
-    })
-  },
-  // 输入出口底部标高
-  inputOutDG: function () {
-    var index = e.target.id;
-    var value = e.detail.value;
-    var outGX = this.data.outGX;
-    outGX[index].height = value;
-    this.setData({
-      outGX: outGX
-    })
-  },
-  // 导入照片 内外一起
+  // 导入照片
   camera: function (e) {
     var id = e.target.id;
     var that = this;
@@ -165,23 +93,26 @@ Page({
       sizeType: ["compressed"],
       success: function (res) {
         paths = res.tempFilePaths;
-        if (id == "inPhont") {
-          that.setData({
-            inPhont: paths
-          })
-        } else if (id == "outPhont") {
-          that.setData({
-            outPhont: paths
-          })
-        }
+        that.setData({
+          photo: paths
+        })
       },
       fail: function (res) {
         console.log(res);
       },
       complete: function (res) {
-
+        var photo = that.data.photo;
+        var photoDemo = false;
+        console.log(photo)
+        if (photo != null && photo.length > 0) {
+          photoDemo = true;
+        }
+        that.setData({
+          photoDemo: photoDemo
+        })
       }
     })
+
   },
   // 提交
   commit: function () {

@@ -33,6 +33,9 @@
   border-bottom:1rpx solid gray;
   font-size: 40rpx;
 }
+.text{
+  font-size: 35rpx;
+}
 .content_icon{
   margin-left:55rpx;
   width:170rpx;
@@ -96,6 +99,31 @@
   text-align:center;
   color:white;
 }
+.in_content{
+  border-top:1rpx dotted gray;
+  margin-top:20rpx;
+  padding-top:10rpx;
+}
+.bg_in{
+  background:white;
+  width:96%;
+  height:75rpx;
+  margin-left:2%;
+  margin-top:10rpx;
+  border-radius:10rpx 10rpx 10rpx 10rpx;
+  padding-top:15rpx;
+}
+in_top{
+  display:flex;
+  flex-direction:row;
+}
+.status_input{
+  height:120rpx;
+  width:90%;
+  margin-left:5%;
+  border:1rpx red solid;
+}
+
 /*--横向滑动scroll-view隐藏滚动条--*/
 ::-webkit-scrollbar {
   width: 0;

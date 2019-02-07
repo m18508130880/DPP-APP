@@ -25,16 +25,16 @@
     </cover-view>
   </block>
   <!--定位-->
-  <cover-image bindtap="positioning" class="location_image" src="../../../image/location.gif"></cover-image>
+  <cover-image bindtap="positioning" class="location_image" src="https://cj.cjsci-tech.com/dpp-app/skin/images/location.gif"></cover-image>
   <!--回到项目-->
-  <cover-image bindtap="project" class="project_image" src="../../../image/project.gif"></cover-image>
+  <cover-image bindtap="project" class="project_image" src="https://cj.cjsci-tech.com/dpp-app/skin/images/project.gif"></cover-image>
   <!--放大-->
-  <cover-image bindtap="zoom" id="big" class="big_image" src="../../../image/big.gif"></cover-image>
+  <cover-image bindtap="zoom" id="big" class="big_image" src="https://cj.cjsci-tech.com/dpp-app/skin/images/big.gif"></cover-image>
   <!--缩小-->
-  <cover-image bindtap="zoom" id="small" class="small_image" src="../../../image/small.gif"></cover-image>
-  <!--工具-->
+  <cover-image bindtap="zoom" id="small" class="small_image" src="https://cj.cjsci-tech.com/dpp-app/skin/images/small.gif"></cover-image>
+  <!--工具--
   <cover-image bindtap="tool" class="tool_image" src="../../../image/tool.gif"></cover-image>
-  <!--数据采集-内部使用-->
+  <!--数据采集-内部使用--
   <cover-image bindtap="checkTask" class="data_image" src="../../../image/data_collect.gif"></cover-image>
 
   <!--底部-->

@@ -17,7 +17,7 @@ Page({
   onLoad: function (e) {
     var that = this;
     wx.request({
-      url: 'https://www.cjscitech.cn/dpp-app/getUseList.do',
+      url: 'https://cj.cjsci-tech.com/dpp-app/getUseList.do',
       //url: 'http://118.31.78.234/dpp-app/Login.do',
       data: {
         Cmd: 1,

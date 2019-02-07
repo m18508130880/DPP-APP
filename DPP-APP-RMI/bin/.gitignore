@@ -1,11 +1,6 @@
-/.classpath
-/.project
-/.project.bak
-/.settings
-/Config.ini
 /DPPAPPRMI
-/StartLNGLOCALRMI
 /bean
 /json
-/lib
+/net
 /rmi
+/util

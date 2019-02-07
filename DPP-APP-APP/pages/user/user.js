@@ -14,8 +14,8 @@ Page({
   init: function () {
     var that = this;
     var userInfo = wx.getStorageSync('userInfo');
-    console.log(userInfo)
-    if (userInfo != null && userInfo.length > 0) {
+    // console.log(userInfo)
+    if (userInfo != null && userInfo != "") {
       var user = {
         cName: userInfo.cName,
         phont:''
@@ -25,7 +25,7 @@ Page({
       })
       var project = wx.getStorageSync("project");
       wx.request({
-        url: 'https://www.cjscitech.cn/dpp-app/Manage_Role.do',
+        url: 'https://cj.cjsci-tech.com/dpp-app/Manage_Role.do',
         //url: 'http://118.31.78.234/dpp-app/Manage_Role.do',
         data: {
           Cmd: "0",
@@ -38,12 +38,16 @@ Page({
           if (res.data.rst == "0000") {
             var dataObj = res.data.cData;
             var projects = new Array();
+            projects.push({
+              cName: "选择项目"
+            })
             var index = 0;
             for (var i = 0; i < dataObj.length; i++) {
               projects.push(dataObj[i]);
               if (project != null){
                 if (project.id == dataObj[i].id){
                   index = i;
+                  projects.splice(0, 1)
                 }
               }
             }
@@ -67,7 +71,7 @@ Page({
   gotoLogin: function (e) {
     var userInfo = wx.getStorageSync('userInfo');
     var url = "";
-    if (userInfo != null && userInfo.length > 0){
+    if (userInfo != null && userInfo != ""){
       url = "userInfo/userInfo";
     }else{
       url = "login/login";
@@ -84,8 +88,9 @@ Page({
     })
     var projects = this.data.projects;
     var project = projects[index];
+    console.log(project)
     wx.setStorageSync("project", project);
-    this.getTopo();
+    //this.getTopo();
   },
   // 切换用户
   changeUser: function () {
@@ -96,7 +101,7 @@ Page({
   // 问题反馈
   gotoFeed: function () {
     var userInfo = wx.getStorageSync("userInfo");
-    if(userInfo != null && userInfo.length > 0){
+    if(userInfo != null && userInfo != ""){
       wx.navigateTo({
         url: "feed/feed"
       })
@@ -149,7 +154,7 @@ Page({
     }
     gjArray = [];
     wx.request({
-      url: 'https://www.cjscitech.cn/dpp-app/ToPo_GJ.do',
+      url: 'https://cj.cjsci-tech.com/dpp-app/ToPo_GJ.do',
       //url: 'http://118.31.78.234/dpp-app/ToPo_GJ.do',
       data: {
         Cmd: "0",
@@ -184,7 +189,7 @@ Page({
           }
           wx.setStorageSync("gjTopo", gjTopo);
           wx.request({
-            url: 'https://www.cjscitech.cn/dpp-app/ToPo_GX.do',
+            url: 'https://cj.cjsci-tech.com/dpp-app/ToPo_GX.do',
             //url: 'http://118.31.78.234/dpp-app/ToPo_GX.do',
             data: {
               Cmd: "0",

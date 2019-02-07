@@ -3,71 +3,50 @@
   <scroll-view scroll-y="true" class="table">
     <view class="bg_content">
       <view class="content_text">
-        <text space='emsp'>编  号: </text>
+        <text space='ensp' class="text">时    间 </text>
       </view>
-      <view class="text_">
-        <text space='emsp'>auto</text>
+      <view class="text_" style="width:250rpx;">
+        <text space='ensp' class="text">auto</text>
       </view>
+      <image bindtap="position" style="margin-top:-10rpx;margin-left:10rpx;width:80rpx;height:80rpx;" src="/image/position.png"></image>
     </view>
 
     <view class="bg_content">
       <view class="content_text">
-        <text space='emsp'>井  深: </text>
+        <text space='ensp' class="text">位    置 </text>
       </view>
       <input class="text_" type="digit" bindinput="inputDeep" value="{{deep}}"></input>
     </view>
 
     <view class="bg_content">
       <view class="content_text">
-        <text space='emsp'>井室尺寸: </text>
+        <text space='ensp' class="text">天    气 </text>
       </view>
       <input class="text_" type="digit" bindinput="inputSize" value="{{size}}"></input>
     </view>
 
     <view class="bg_content">
-      <image id="qd" class="content_icon" bindtap="radioCheckedChange" src="../../../image/qd{{qd}}.png"></image>
-      <image id="zjd" class="content_icon" bindtap="radioCheckedChange"  src="../../../image/zjd{{zjd}}.png"></image>
-      <image id="zd" class="content_icon" bindtap="radioCheckedChange"  src="../../../image/zd{{zd}}.png"></image>
+      <view class="content_text">
+        <text space='ensp' class="text">施工编号 </text>
+      </view>
+      <input class="text_" type="digit" bindinput="inputSize" value="{{size}}"></input>
     </view>
 
-    <view class="bg_in" hidden="{{inGXHidden}}" style="height:{{inHeight}}rpx">
-      <view class="in_top">
-        <text space='emsp'>   入 口 管 线 </text>
-        <image class="in_top_img" bindtap="addInGX" src="../../../../image/add.png"></image>
+    <view class="bg_content">
+      <view class="content_text">
+        <text space='ensp' class="text">设施类型 </text>
       </view>
-      <view class="in_content">
-        <block wx:for="{{inGX}}" wx:key="index">
-          <view class="in_content_d">
-            <text class="in_content_text" space='ensp'>管 \n径 </text><input id="{{index}}" class="in_content_input" type="digit" bindinput="inputInGJ" value="{{item.diameter}}"></input>
-            <text class="in_content_text" space='ensp'>  底部 \n  标高 </text><input id="{{index}}" class="in_content_input" type="digit" bindinput="inputInDG" value="{{item.height}}"></input>
-            <text class="in_content_text" space='ensp'>  入口 \n  管井 </text><input id="{{index}}" class="in_content_input" type="digit" bindinput="inputInRK" style="width:150rpx" value="{{item.gjId}}"></input>
-          </view>
-        </block>
-      </view>
+      <input class="text_" type="digit" bindinput="inputSize" value="{{size}}"></input>
     </view>
-    <view class="bg_in" hidden="{{outGXHidden}}" style="height:170rpx;">
-      <text space='emsp'>   出 口 管 线</text>
-      <view class="in_content">
-          <view class="in_content_d">
-            <text class="in_content_text" space='ensp'>管 \n径 </text><input class="in_content_input" type="digit" value="{{outGX.diameter}}"></input>
-            <text class="in_content_text" space='ensp'>  底部 \n  标高 </text><input class="in_content_input" type="digit" value="{{outGX.height}}"></input>
-            <text class="in_content_text" space='ensp'>  出口 \n  管井 </text><text class="in_content_input" style="width:150rpx">auto</text>
-          </view>
+
+    <view class="bg_content">
+      <view class="content_text">
+        <text space='ensp' class="text">施工说明 </text>
       </view>
-    </view>
-   
-    <view class="bg_in" style="height:210rpx;">
-      <text space='emsp'>   外 部 照 片</text>
-      <view class="" style="padding-left:60rpx;border-top:1rpx dotted gray;margin-top:20rpx;padding-top:10rpx;">
-        <block wx:for="{{outPhont}}" wx:key="">
-          <image style="margin-right:15rpx;width:110rpx;height:110rpx" src="../../../image/{{item}}?new Date()"></image>
-        </block>
-        <image id="outPhont" style="width:110rpx;height:110rpx;" bindtap="camera" src="../../../../image/addPhont.png"></image>
-      </view>
+      <input class="text_" type="digit" bindinput="inputSize" value="{{size}}"></input>
     </view>
 
     <view class="bg_in" style="height:210rpx;">
-      <text space='emsp'>   内 部 照 片</text>
       <view class="" style="padding-left:60rpx;border-top:1rpx dotted gray;margin-top:20rpx;padding-top:10rpx;">
         <block wx:for="{{inPhont}}" wx:key="">
           <image style="margin-right:15rpx;width:110rpx;height:110rpx" src="../../../image/{{item}}?new Date()"></image>
@@ -78,7 +57,7 @@
     
     <view class="bg_content" style="height:300rpx;">
       <view class="content_text">
-        <text space='emsp'>备  注: </text>
+        <text space='ensp' class="text">备  注 </text>
       </view>
         <view class="textarea-wrp">
       <textarea bindblur="bindTextAreaBlur" auto-height />

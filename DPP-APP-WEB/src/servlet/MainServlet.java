@@ -15,6 +15,7 @@ import rmi.Rmi;
 import util.CommUtil;
 import bean.AppNewsBean;
 import bean.AppUseBean;
+import bean.DataGJBean;
 import bean.TopoGJBean;
 import bean.TopoGXBean;
 import bean.UserInfoBean;
@@ -93,8 +94,11 @@ public class MainServlet extends HttpServlet
         	new TopoGJBean().ExecCmd(request, response, m_Rmi, false, strUrl, TokenList);
         else if (strUrl.equalsIgnoreCase("ToPo_GX.do"))			            			//GIS监控-管线
         	new TopoGXBean().ExecCmd(request, response, m_Rmi, false, strUrl, TokenList);
+        else if (strUrl.equalsIgnoreCase("Real_Water_Lev.do"))				        			//实时监测-GIS
+        	new DataGJBean().ExecCmd(request, response, m_Rmi, false, strUrl, TokenList);
         
-    	
+        
+        /*****************************************登录************************************************/
         else if (strUrl.equalsIgnoreCase("Login.do"))						         	 	//登录
         	new UserInfoBean().Login(request, response, m_Rmi, strUrl, TokenList);		
         /*else if(strUrl.equals("AppLogout.do"))											//登出接口    

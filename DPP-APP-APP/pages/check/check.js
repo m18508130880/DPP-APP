@@ -21,7 +21,7 @@ Page({
   // 获取用户信息
   getUserInfo: function (){
     var userInfo = wx.getStorageSync("userInfo");
-    if (!(userInfo != null && userInfo.length > 0)) {
+    if (!(userInfo != null && userInfo != "")) {
       wx.reLaunch({
         url: '../user/user'
       })

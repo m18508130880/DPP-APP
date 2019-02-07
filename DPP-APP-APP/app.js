@@ -1,6 +1,6 @@
 App({
   config:{
-    imgPath: "https://www.cjscitech.cn/dpp-app/skin/images/"
+    imgPath: "https://cj.cjsci-tech.com/dpp-app/skin/images/"
   },
   Login: function () {
     var md5 = require("libs/md5.js");
@@ -16,8 +16,9 @@ App({
       return;
     }
     wx.request({
-      url: 'https://www.cjscitech.cn/dpp-app/Login.do',
+      //url: 'https://www.cjscitech.cn/dpp-app/Login.do',
       //url: 'http://118.31.78.234/dpp-app/Login.do',
+      url: 'https://cj.cjsci-tech.com/dpp-app/Login.do',
       data: {
         Id: userName,
         StrMd5: md5.hex_md5(userName + password),

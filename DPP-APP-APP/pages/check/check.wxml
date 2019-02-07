@@ -2,6 +2,7 @@
 <template is="tabBar" data="{{tabBar:bindData.tabBar}}"/>
 
 <view class="page tab">
+
   <!-- 测量 -->
   <view class="bg_top">
     <image class="top_img" src='../../image/engineer.png'></image>

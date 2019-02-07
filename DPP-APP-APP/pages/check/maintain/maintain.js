@@ -8,36 +8,42 @@ function writeStatus(status, icon) {
 };
 Page({
   data: {
-    id:'001001',
-    deep:'1.2',
-    size:'1000',
-    inGX:[
-      {
-      diameter:'300',
-      height:'3.52',
-      gjId:'001001'
-      }
-    ],
-    outGX:{
-      diameter: '300',
-      height: '3.52',
-      gjId: '001001'
+    vol:"",
+    radio:[{
+      name:"正常",
+      value: "0",
+      checked: true
+    },{
+        name: "异常",
+        value: "1",
+        checked: false
+    }],
+    dtuStatus:{
+      height: 75,
+      que: true,
+      code: "",
+      text: "",
     },
-    inPhont: [],
-    outPhont: [],
-    demo:'测试',
-    
-    userInfo: {},
-    userName: "",
-    password: "",
-    multiArray: [['001', '002'], ['001','002','003','004','005','006']],
-    multiIndex: [0, 0],
-    inGXHidden:false,
-    outGXHidden:false,
-    inHeight:170,
-    qd:'',
-    zjd:'_',
-    zd:''
+    equipStatus: {
+      height: 75,
+      que: true,
+      code: "",
+      text: "",
+    },
+    powerStatus: {
+      height: 75,
+      que: true,
+      code: "",
+      text: "",
+    },
+    signalStatus: {
+      height: 75,
+      que: true,
+      code: "",
+      text: "",
+    },
+    photo: [],
+    photoDemo: false,
   },
   // 初始化
   onLoad: function () {
@@ -57,118 +63,130 @@ Page({
       }
     })
   },
-  // 输入深度
-  inputDeep: function (e) {
-    var index = e.target.id;
+  // 工作电压
+  inputVol: function (e) {
     var value = e.detail.value;
     this.setData({
-      deep: value
+      vol: value
     })
   },
-  // 输入井室尺寸
-  inputSize: function (e) {
-    var index = e.target.id;
-    var value = e.detail.value;
-    this.setData({
-      size: value
-    })
-  },
-  // 更改起终点
-  radioCheckedChange: function (e) {
-    var val = e.target.id;
-    var inHidden = true;
-    var outHidden = true;
-    var qd = '';
-    var zjd = '';
-    var zd = '';
-    if(val == 'qd'){
-      qd = '_';
-      inHidden = true;
-      outHidden = false;
-    } else if (val == 'zjd') {
-      zjd = '_';
-      inHidden = false;
-      outHidden = false;
-    } else if (val == 'zd') {
-      zd = '_';
-      inHidden = false;
-      outHidden = true;
+  // DTU状态
+  dtuStatus: function (e) {
+    console.log(e)
+    var index = e.detail.value;
+    var que = true;
+    var height = 75;
+    var code = "0"
+    if(index == "1"){
+      que = false;
+      height = 220;
+      code = "1";
     }
     this.setData({
-      inGXHidden:inHidden,
-      outGXHidden:outHidden,
-      qd: qd,
-      zjd: zjd,
-      zd: zd
-    })
-  },
-  // 增加入口输入框
-  addInGX: function (e) {
-    var inGX = this.data.inGX;
-    inGX.push(
-      {
-        diameter: '300',
-        height: '3.52',
-        gjId: '001001'
+      dtuStatus:{
+        height: height,
+        que: que,
+        code: code
       }
-    );
-    var inHeight = this.data.inHeight;
-    this.setData({
-      inHeight: inHeight + 80,
-      inGX: inGX
     })
   },
-  // 输入入口管径
-  inputInGJ: function (e){
-    var index = e.target.id;
-    var value = e.detail.value; 
-    var inGX = this.data.inGX;
-    inGX[index].diameter = value;
-    this.setData({
-      inGX:inGX
-    })
-  },
-  // 输入入口底部标高
-  inputInDG: function (e) {
-    var index = e.target.id;
+  // DTU问题说明
+  inputDtuText: function () {
     var value = e.detail.value;
-    var inGX = this.data.inGX;
-    inGX[index].height = value;
+    var dtuStatus = this.data.dtuStatus;
+    dtuStatus.text = value;
     this.setData({
-      inGX: inGX
+      dtuStatus: dtuStatus
     })
   },
-  // 输入入口管井编号
-  inputInRK: function (e) {
-    var index = e.target.id;
+  // 设备状态
+  equipStatus: function (e) {
+    //console.log(e)
+    var index = e.detail.value;
+    var que = true;
+    var height = 75;
+    var code = "0"
+    if (index == "1") {
+      que = false;
+      height = 220;
+      code = "1";
+    }
+    this.setData({
+      equipStatus: {
+        height: height,
+        que: que,
+        code: code
+      }
+    })
+  },
+  // 设备问题说明
+  inputEquipText: function () {
     var value = e.detail.value;
-    var inGX = this.data.inGX;
-    inGX[index].gjId = value;
+    var equipStatus = this.data.equipStatus;
+    equipStatus.text = value;
     this.setData({
-      inGX: inGX
+      equipStatus: equipStatus
     })
   },
-  // 输入出口管径
-  inputOutGJ: function () {
-    var index = e.target.id;
+  // 电源状态
+  powerStatus: function (e) {
+    //console.log(e)
+    var index = e.detail.value;
+    var que = true;
+    var height = 75;
+    var code = "0"
+    if (index == "1") {
+      que = false;
+      height = 220;
+      code = "1";
+    }
+    this.setData({
+      powerStatus: {
+        height: height,
+        que: que,
+        code: code
+      }
+    })
+  },
+  // 电源问题说明
+  inputPowerText: function () {
     var value = e.detail.value;
-    var outGX = this.data.outGX;
-    outGX[index].diameter = value;
+    var powerStatus = this.data.powerStatus;
+    powerStatus.text = value;
     this.setData({
-      outGX: outGX
+      powerStatus: powerStatus
     })
   },
-  // 输入出口底部标高
-  inputOutDG: function () {
-    var index = e.target.id;
+  // 信号状态
+  signalStatus: function (e) {
+    //console.log(e)
+    var index = e.detail.value;
+    var que = true;
+    var height = 75;
+    var code = "0"
+    if (index == "1") {
+      que = false;
+      height = 220;
+      code = "1";
+    }
+    this.setData({
+      signalStatus: {
+        height: height,
+        que: que,
+        code: code
+      }
+    })
+  },
+  // 信号问题说明
+  inputSignalText: function () {
     var value = e.detail.value;
-    var outGX = this.data.outGX;
-    outGX[index].height = value;
+    var signalStatus = this.data.signalStatus;
+    signalStatus.text = value;
     this.setData({
-      outGX: outGX
+      signalStatus: signalStatus
     })
   },
-  // 导入照片 内外一起
+  // 导入照片
   camera: function (e) {
     var id = e.target.id;
     var that = this;
@@ -178,23 +196,26 @@ Page({
       sizeType: ["compressed"],
       success: function (res) {
         paths = res.tempFilePaths;
-        if (id == "inPhont") {
-          that.setData({
-            inPhont: paths
-          })
-        } else if (id == "outPhont") {
-          that.setData({
-            outPhont: paths
-          })
-        }
+        that.setData({
+          photo: paths
+        })
       },
       fail: function (res) {
         console.log(res);
       },
       complete: function (res) {
-
+        var photo = that.data.photo;
+        var photoDemo = false;
+        console.log(photo)
+        if (photo != null && photo.length > 0) {
+          photoDemo = true;
+        }
+        that.setData({
+          photoDemo: photoDemo
+        })
       }
     })
+    
   },
   // 提交
   commit: function () {
@@ -204,28 +225,7 @@ Page({
   // 重置
   doRest: function () {
     this.setData({
-      id: '',
-      deep: '',
-      size: '',
-      inGX: [
-        {
-          diameter: '',
-          height: '',
-          gjId: ''
-        }
-      ],
-      outGX: {
-        diameter: '',
-        height: '',
-        gjId: ''
-      },
-      inPhont: [],
-      outPhont: [],
-      demo: '',
-      radioCheckVal: 1,
-      inGXHidden: false,
-      outGXHidden: false,
-      inHeight: 170
+      
     })
   }
 })

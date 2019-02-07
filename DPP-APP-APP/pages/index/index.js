@@ -27,15 +27,16 @@ Page({
   },
   // 生命周期监听
   onShow: function () {
-    this.getNewsList();
-    this.getUseList();
+    //this.getNewsList();
+    //this.getUseList();
   },
   // 获取新闻信息
   getNewsList: function () {
     var that = this;
     wx.request({
-      url: 'https://www.cjscitech.cn/dpp-app/getNewsList.do',
+      //url: 'https://www.cjscitech.cn/dpp-app/getNewsList.do',
       //url: 'http://118.31.78.234/dpp-app/Login.do',
+      url: 'https://cj.cjsci-tech.com/dpp-app/getNewsList.do',
       data: {
         Cmd: 0,
         newDate: new Date()
@@ -55,8 +56,9 @@ Page({
   getUseList: function () {
     var that = this;
     wx.request({
-      url: 'https://www.cjscitech.cn/dpp-app/getUseList.do',
+      //url: 'https://www.cjscitech.cn/dpp-app/getUseList.do',
       //url: 'http://118.31.78.234/dpp-app/Login.do',
+      url: 'https://cj.cjsci-tech.com/dpp-app/getUseList.do',
       data: {
         Cmd: 0,
         newDate: new Date()

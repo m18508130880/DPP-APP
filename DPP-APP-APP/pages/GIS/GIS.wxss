@@ -67,15 +67,15 @@
   width:30px;
   height:30px;
   position: absolute;
-  bottom: 47%;
-  left: 5%;
+  bottom: 30%;
+  right: 5%;
 }
 .small_image{
   width:30px;
   height:30px;
   position: absolute;
-  bottom: 40%;
-  left: 5%;
+  bottom: 20%;
+  right: 5%;
 }
 .tool_image{
   width:30px;
